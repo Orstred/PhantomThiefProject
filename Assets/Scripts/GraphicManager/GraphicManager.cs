@@ -18,6 +18,8 @@ public class GraphicManager : MonoBehaviour
     [Foldout("GraphicID")]
     public gender Gender;
     [Foldout("GraphicID")]
+    public profession Profession;
+    [Foldout("GraphicID")]
     public int Hat_id;
     [Foldout("GraphicID")]
     public int Head_id;
@@ -28,10 +30,10 @@ public class GraphicManager : MonoBehaviour
     #endregion
 
     #region Local Variables
-    public GameObject _currentHat;
-    public GameObject _currentHead;
-    public GameObject _currentBody;
-    public GameObject _currentLegs;
+    GameObject _currentHat;
+    GameObject _currentHead;
+    GameObject _currentBody;
+    GameObject _currentLegs;
     #endregion
 
 
@@ -40,8 +42,22 @@ public class GraphicManager : MonoBehaviour
 
 
     [Button]
-    public void ChangeCostume()
+    public void UpdateCostume()
     {
+
+        #region Instantiate local variables
+        FemaleCostumes.Profession = Profession;
+        MaleCostumes.Profession = Profession;
+        if(_currentHat == null)
+            _currentHat = MaleCostumes.Civilian_Costume[0].Hat;
+        if (_currentHead== null)
+            _currentHead = MaleCostumes.Civilian_Costume[0].Head;
+        if (_currentBody == null)
+            _currentBody = MaleCostumes.Civilian_Costume[0].Body;
+        if (_currentLegs == null)
+            _currentLegs = MaleCostumes.Civilian_Costume[0].Legs;
+        #endregion
+
 
         TurnHatOn(Hat_id);
         TurnHeadOn(Head_id);
@@ -53,7 +69,7 @@ public class GraphicManager : MonoBehaviour
 
     void TurnHatOn(int _id)
     {
-        if(MaleCostumes.CurrentProfession().Length > _id)
+        if(MaleCostumes.CurrentProfession().Length >= _id)
         {
             if (Gender == gender.Male)
             {
@@ -64,12 +80,13 @@ public class GraphicManager : MonoBehaviour
 
             else if (Gender == gender.Female)
             {
+                
                 _currentHat.SetActive(false);
                 _currentHat = FemaleCostumes.CurrentProfession()[_id].Hat;
                 _currentHat.SetActive(true);
             }
         }
-        else { Debug.Log("Head out of range"); }
+        else { Debug.Log("Hat out of range"); }
 
 
 
@@ -96,7 +113,6 @@ public class GraphicManager : MonoBehaviour
         else { Debug.Log("Head out of range"); }
         
     }
-
     void TurnBodyOn(int _id)
     {
         if (MaleCostumes.CurrentProfession().Length > _id)
@@ -115,7 +131,7 @@ public class GraphicManager : MonoBehaviour
                 _currentBody.SetActive(true);
             }
         }
-        else { Debug.Log("Head out of range"); }
+        else { Debug.Log("Body out of range"); }
 
     }
     void TurnLegsOn(int _id)
@@ -136,8 +152,17 @@ public class GraphicManager : MonoBehaviour
                 _currentLegs.SetActive(true);
             }
         }
-        else { Debug.Log("Head out of range"); }
+        else { Debug.Log("Legs out of range"); }
     }
 
 
+    public GraphicList CurrentGenderCostumes()
+    {
+        if (Gender == gender.Male)
+        {
+            return MaleCostumes;
+        }
+        else
+            return FemaleCostumes;
+    }
 }

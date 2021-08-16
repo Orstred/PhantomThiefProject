@@ -5,6 +5,7 @@ public enum profession { PhantomThief = 1, Police, Civilian, Miscellaneous }
 [System.Serializable]
 public class GraphicList 
 {
+    [HideInInspector]
     public profession Profession;
     public Costumes[] PhantomThief_Costume;
     public Costumes[] Police_Costume;
