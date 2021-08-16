@@ -39,10 +39,7 @@ public class PlayerMotor : MonoBehaviour
 
     private void Update()
     {
-       
 
-
-        
 
         #region Gravity
         bool isGrounded = Physics.CheckSphere(transform.position, 0.2f, GroundLayer);
@@ -85,30 +82,6 @@ public class PlayerMotor : MonoBehaviour
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //Moves the player at the provided angle
     void Moveonangle(float A)
     {
@@ -117,7 +90,6 @@ public class PlayerMotor : MonoBehaviour
        transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(0, CameraYRotation + A, 0), Time.deltaTime * TurnSpeed);
 
        _controller.Move(transform.forward  * Time.deltaTime * CurrentSpeed);
- 
     }
      
 
@@ -137,7 +109,7 @@ public class PlayerMotor : MonoBehaviour
     }
 
 
-    public void Jump(float jumheight = 0f)
+    public void Jump(float jumheight = 0.1f)
     {
         GravityVelocity.y = Mathf.Sqrt(jumheight * 2f * Weight);
     }
@@ -147,10 +119,9 @@ public class PlayerMotor : MonoBehaviour
     public void ResetRootPos()
     {
         _controller.enabled = false;
-        PlayerGraphic.parent = null;
-        _transform.parent = PlayerGraphic.transform;
+        _transform.SetParent(PlayerGraphic, true);
         _transform.localPosition = Vector3.zero;
-        PlayerGraphic.parent = _transform;
+        PlayerGraphic.SetParent(_transform);
         _controller.enabled = true;
     }
 
@@ -159,9 +130,9 @@ public class PlayerMotor : MonoBehaviour
     public void MoveParent(Transform parent, Transform child, Vector3 NewPosition)
     {
         _controller.enabled = false;
-        parent.parent = child;
+        parent.parent.SetParent(child);
         parent.localPosition = NewPosition;
-        child.parent = parent;
+        child.parent.SetParent(parent);
         _controller.enabled = true;
     }
 
@@ -182,6 +153,7 @@ public class PlayerMotor : MonoBehaviour
         return Vector3.zero;
     }
         
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

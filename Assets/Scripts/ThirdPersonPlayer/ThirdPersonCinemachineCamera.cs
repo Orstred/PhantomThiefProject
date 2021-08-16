@@ -8,15 +8,13 @@ public class ThirdPersonCinemachineCamera : MonoBehaviour
     public Cinemachine.AxisState xAxis;
     public Cinemachine.AxisState yAxis;
     Transform _transform;
-    Camera Maincamera;
     Transform PlayerCharacter;
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _transform = transform;
-        Maincamera = Camera.main;
-        PlayerCharacter = GameManager.instance.playercharacter.GetComponent<PlayerMotor>().transform;
+        PlayerCharacter = GameManager.instance.playercharacter;
     }
     private void Update()
     {

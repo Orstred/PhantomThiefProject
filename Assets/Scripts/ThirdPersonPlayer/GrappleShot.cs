@@ -5,7 +5,7 @@ using Cinemachine;
 using NaughtyAttributes;
 public class GrappleShot : MonoBehaviour
 {
-    //Instances
+    #region Instances
     Camera MainCamera;
     Transform MainCameraTransform;
     Transform CameraPivot;
@@ -13,16 +13,16 @@ public class GrappleShot : MonoBehaviour
     public RectTransform GrappleCrosshair;
     [Foldout("Instances")]
     public CinemachineVirtualCamera ReelingInCamera;
+    #endregion
 
-
-    //Stats & Options
+    #region Stats & Options
     [Foldout("Stats & Options")]
     public float ReelingSpeed;
     [Foldout("Stats & Options")]
     public float ReelStopDistance;
     [Foldout("Stats & Options")]
     public float GrappleShotRange;
-
+    #endregion
 
     //PlayerCharacter Components instantiation
     Transform PlayerCharacter;
