@@ -308,11 +308,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2738939439666872015, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: Gender
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2738939439666872015, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: Hat_id
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2738939439666872015, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: Profession
@@ -420,7 +420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3689275821597435640, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3689275821622807264, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: m_IsActive
@@ -432,7 +432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3689275821850133979, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3689275821886569705, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: m_IsActive
@@ -452,7 +452,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3689275822390977812, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3689275822673578348, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: m_IsActive

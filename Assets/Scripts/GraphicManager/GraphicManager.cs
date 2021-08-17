@@ -49,13 +49,13 @@ public class GraphicManager : MonoBehaviour
         FemaleCostumes.Profession = Profession;
         MaleCostumes.Profession = Profession;
         if(_currentHat == null)
-            _currentHat = MaleCostumes.Civilian_Costume[0].Hat;
+            _currentHat = MaleCostumes.PhantomThief_Costume[0].Hat;
         if (_currentHead== null)
-            _currentHead = MaleCostumes.Civilian_Costume[0].Head;
+            _currentHead = MaleCostumes.PhantomThief_Costume[0].Head;
         if (_currentBody == null)
-            _currentBody = MaleCostumes.Civilian_Costume[0].Body;
+            _currentBody = MaleCostumes.PhantomThief_Costume[0].Body;
         if (_currentLegs == null)
-            _currentLegs = MaleCostumes.Civilian_Costume[0].Legs;
+            _currentLegs = MaleCostumes.PhantomThief_Costume[0].Legs;
         #endregion
 
 

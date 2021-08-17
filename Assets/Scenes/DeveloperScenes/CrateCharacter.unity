@@ -484,7 +484,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 229932655}
-  m_LocalRotation: {x: -0.0076946816, y: 0.99133366, z: -0.06803907, w: -0.112112015}
+  m_LocalRotation: {x: -0.0076946802, y: 0.99133366, z: -0.06803907, w: -0.112112}
   m_LocalPosition: {x: -606.2264, y: -343.73557, z: 117.74937}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -957,7 +957,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 379477798}
-  m_LocalRotation: {x: -0.007694677, y: 0.99133366, z: -0.06803905, w: -0.112112}
+  m_LocalRotation: {x: -0.0076946765, y: 0.99133366, z: -0.06803905, w: -0.112111986}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3239,7 +3239,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1229902265}
-  m_LocalRotation: {x: -0.008200694, y: 0.9910164, z: -0.072513424, w: -0.11207612}
+  m_LocalRotation: {x: -0.008200692, y: 0.9910164, z: -0.072513424, w: -0.11207609}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5085,7 +5085,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1980539566}
-  m_LocalRotation: {x: -0.010669361, y: 0.98917705, z: -0.09434223, w: -0.11186811}
+  m_LocalRotation: {x: -0.010669358, y: 0.98917705, z: -0.094342224, w: -0.111868106}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5540,6 +5540,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2738939439666872015, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: Profession
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2738939439666872015, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: MaleCostumes.Profession
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2738939439666872015, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: FemaleCostumes.Profession
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2738939439812252562, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: m_Name
       value: CharacterGraphic
@@ -5586,6 +5598,54 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2738939439812252565, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275821117876727, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275821134966821, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275821223610204, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275821458973028, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275821461978561, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275821622807264, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275821791241202, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275822023622994, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275822673578348, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275822707132171, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275822839712041, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689275822968015260, guid: f506cb8afbcf0944bb2a7984959cae8c, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
