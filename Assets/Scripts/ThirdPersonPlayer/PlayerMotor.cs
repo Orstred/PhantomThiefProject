@@ -7,47 +7,53 @@ public class PlayerMotor : MonoBehaviour
 {
 
 
-    #region Intantiation
+    #region Instantiation
     CharacterController _controller;
-    Transform PlayerGraphic;
+    Transform playergraphic;
     Transform Cameraparent;
     Transform _transform;
-
     private void Start()
     {
-        PlayerGraphic = GameManager.instance.PlayerGraphic;
         _controller = GetComponent<CharacterController>();
+        playergraphic = GameManager.instance.PlayerGraphic;
         Cameraparent = GameManager.instance.CameraPivot;
         _transform = transform;
     }
     #endregion
 
-    #region Options
-    [MinMaxSlider(0.0f, 36f)]
-    public Vector2 WalkRunSpeed;
-    public float TurnSpeed;
-    public float Weight;
-    public float JumpHeight;
-    public LayerMask GroundLayer;
+
+    #region Movement Stats
+
+    public float WalkSpeed = 5, RunSpeed = 15;
+
+    public float TurnSpeed = 10;
+
+    public float Weight = 25;
+
+    public float JumpHeight = 3;
+
+    public LayerMask GroundLayers;
+
+    public float GroundDistance = .4f;
     #endregion
 
 
-    float CurrentSpeed;
-    Vector3 GravityVelocity;
-
+    #region Local Variables
+    float currentspeed;
+    Vector3 gravityvelocity;
+    #endregion
 
 
     private void Update()
     {
-
-
         #region Gravity
-        bool isGrounded = Physics.CheckSphere(transform.position, 0.2f, GroundLayer);
+        bool isGrounded = Physics.CheckSphere(transform.position, 0.2f, GroundLayers);
 
-        if (isGrounded && GravityVelocity.y < 0)
+        //Calculates gravity when on ground
+        if (isGrounded && gravityvelocity.y < 0)
         {
 
-            GravityVelocity.y = -Weight;
+            gravityvelocity.y = -Weight;
 
             if (Input.GetButton("Jump"))
             {
@@ -56,42 +62,31 @@ public class PlayerMotor : MonoBehaviour
 
 
         }
-        //Applies gravity when not on ground
-        GravityVelocity.y -= Weight * Time.deltaTime;
 
-        _controller.Move(GravityVelocity * Time.deltaTime);
+
+        //Calculates gravity when not on ground increasing momentum
+        gravityvelocity.y -= Weight * Time.deltaTime;
+
+
+        //Aplies gravity after calculations
+        _controller.Move(gravityvelocity * Time.deltaTime);
 
         #endregion
 
-        #region Inputs
+        #region Movement Inputs
         //Switches between running and walking speeds
-        CurrentSpeed = (CurrentSpeed != WalkRunSpeed.y) && Input.GetButtonDown("ToggleRun") || (Input.anyKey) && (CurrentSpeed == WalkRunSpeed.y) && (!Input.GetButtonDown("ToggleRun"))? WalkRunSpeed.y : WalkRunSpeed.x;
+        currentspeed = (currentspeed != RunSpeed) && Input.GetButtonDown("ToggleRun") || (Input.anyKey) && (currentspeed == RunSpeed) && (!Input.GetButtonDown("ToggleRun")) ? RunSpeed : WalkSpeed;
 
         //WASD Inputs
-        if(Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
         {
-
-
-            Moveonangle(GetKeyboardInputAxisAngle()) ;
-
+            Moveonangle(GetKeyboardInputAxisAngle());
         }
         #endregion
-
-  
     }
 
 
 
-    //Moves the player at the provided angle
-    void Moveonangle(float A)
-    {
-       float CameraYRotation = Cameraparent.eulerAngles.y;
-
-       transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(0, CameraYRotation + A, 0), Time.deltaTime * TurnSpeed);
-
-       _controller.Move(transform.forward  * Time.deltaTime * CurrentSpeed);
-    }
-     
 
     //Returns angle based on WASD inputs
     float GetKeyboardInputAxisAngle()
@@ -108,23 +103,30 @@ public class PlayerMotor : MonoBehaviour
         return targetangle;
     }
 
+    //Moves the player at the provided angle based on the cameras current angle
+    void Moveonangle(float A)
+    {
+        float CameraYRotation = Cameraparent.eulerAngles.y;
+
+        transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(0, CameraYRotation + A, 0), Time.deltaTime * TurnSpeed);
+
+        _controller.Move(transform.forward * Time.deltaTime * currentspeed);
+    }
 
     public void Jump(float jumheight = 0.1f)
     {
-        GravityVelocity.y = Mathf.Sqrt(jumheight * 2f * Weight);
+        gravityvelocity.y = Mathf.Sqrt(jumheight * 2f * Weight);
     }
-
 
     //Moves the parent to the same position as the player graphic
     public void ResetRootPos()
     {
         _controller.enabled = false;
-        _transform.SetParent(PlayerGraphic, true);
+        _transform.SetParent(playergraphic, true);
         _transform.localPosition = Vector3.zero;
-        PlayerGraphic.SetParent(_transform);
+        playergraphic.SetParent(_transform);
         _controller.enabled = true;
     }
-
 
     //Moves the parent to a given position relative to the child
     public void MoveParent(Transform parent, Transform child, Vector3 NewPosition)
@@ -137,28 +139,13 @@ public class PlayerMotor : MonoBehaviour
     }
 
 
-    //Sends a Raycast that checks to see if there is a wall in front of it and if there is it returns the measurements
-    public Vector3 GetObjectSize(Transform raycenter, float DetectDistance = 1f, string ObjectTag = "Wall")
-    {
-        RaycastHit hit;
-
-        if (Physics.Raycast(raycenter.position, transform.forward, out hit, DetectDistance))
-        {
-            if (hit.transform.tag == ObjectTag)
-            {
-                return Vector3.Scale(hit.transform.GetComponent<MeshFilter>().sharedMesh.bounds.size, hit.transform.localScale);
-
-            }
-        }
-        return Vector3.zero;
-    }
-        
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + transform.up * JumpHeight);
         Gizmos.DrawSphere(transform.position + transform.up * JumpHeight, 0.2f);
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, GroundDistance);
     }
 
 }

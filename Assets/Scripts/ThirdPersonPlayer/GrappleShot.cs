@@ -5,15 +5,30 @@ using Cinemachine;
 using NaughtyAttributes;
 public class GrappleShot : MonoBehaviour
 {
+
+
     #region Instances
+
+    //Camera instances
+    public CinemachineVirtualCamera ReelingInCamera;
     Camera MainCamera;
     Transform MainCameraTransform;
     Transform CameraPivot;
+
+    //Grapple instances
+    LineRenderer _ropegraphic;
     [Foldout("Instances")]
     public RectTransform GrappleCrosshair;
     [Foldout("Instances")]
-    public CinemachineVirtualCamera ReelingInCamera;
+
+    //PlayerCharacter Components instantiation
+    Transform PlayerCharacter;
+    PlayerMotor motor;
+    CharacterController controller;
+
     #endregion
+
+
 
     #region Stats & Options
     [Foldout("Stats & Options")]
@@ -24,17 +39,13 @@ public class GrappleShot : MonoBehaviour
     public float GrappleShotRange;
     #endregion
 
-    //PlayerCharacter Components instantiation
-    Transform PlayerCharacter;
-    PlayerMotor motor;
-    CharacterController controller;
 
-    //Local Variables
+
+    #region local variables
     bool isReeling = false;
     bool isGrappling = false;
-    LineRenderer _ropegraphic;
     Vector3 LastRaycastPosition;
-
+    #endregion
 
 
 
@@ -43,7 +54,8 @@ public class GrappleShot : MonoBehaviour
 
     private void Start()
     {
-
+        GrappleCrosshair.SetParent(null);
+        ReelingInCamera.transform.parent = GameObject.Find("Cameras").transform; 
         //Public Instantiation
         CameraPivot = GameManager.instance.CameraPivot;
         MainCamera = Camera.main;
@@ -63,10 +75,10 @@ public class GrappleShot : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-
             GrappleCrosshair.position = hit.point;
-            GrappleCrosshair.parent.transform.parent = MainCameraTransform;
         }
+
+        transform.parent = null;
     }
 
     private void Update()
@@ -76,15 +88,14 @@ public class GrappleShot : MonoBehaviour
         #region Raycast
         Ray ray = MainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit hit;
+        float dist = (MainCameraTransform.position - GrappleCrosshair.position).magnitude;
         if (Physics.Raycast(ray, out hit))
         {
-
           
             LastRaycastPosition = hit.point;
             if (GrappleCrosshair.parent == null && hit.transform.tag != "Player")
             {
                 //Makes the crosshair always have the same screen size
-                float dist = (MainCameraTransform.position - GrappleCrosshair.position).magnitude;
                 GrappleCrosshair.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Lerp(GrappleCrosshair.sizeDelta.x, dist / 8, Time.deltaTime * 60));
                 GrappleCrosshair.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Mathf.Lerp(GrappleCrosshair.sizeDelta.y, dist / 8, Time.deltaTime * 60));
 
@@ -92,10 +103,6 @@ public class GrappleShot : MonoBehaviour
                 GrappleCrosshair.SetParent(MainCameraTransform, true); 
 
             }
-            
-
-       
-
         }
         else
         {
@@ -104,13 +111,14 @@ public class GrappleShot : MonoBehaviour
             GrappleCrosshair.position = LastRaycastPosition;
 
         }
+        //Makes crosshair always have the same screen size
+        GrappleCrosshair.localScale = new Vector3(.02f, .02f, .02f) * dist;
         #endregion
 
 
 
 
-
-
+        //Shoot Grapple hook
         if (Input.GetButtonDown("Fire1"))
             {
                 OnGrappleStart();
@@ -131,6 +139,8 @@ public class GrappleShot : MonoBehaviour
 
             }
 
+
+        //Reeel in
         if (isGrappling)
         {
             if (Input.GetButtonDown("Fire2"))
@@ -152,7 +162,6 @@ public class GrappleShot : MonoBehaviour
         }
    
     }
-
 
     private void LateUpdate()
     {

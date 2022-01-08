@@ -40,6 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6835660650411033105}
   - component: {fileID: 6835660650550275915}
+  - component: {fileID: 5789192030103416447}
   m_Layer: 6
   m_Name: CharacterGraphic
   m_TagString: Player
@@ -103,10 +104,24 @@ MonoBehaviour:
       Legs: {fileID: 6835660652084239995}
     Miscellaneous: []
   Gender: 1
+  Profession: 0
   Hat_id: 1
   Head_id: 1
   Body_id: 1
   Legs_id: 1
+--- !u!114 &5789192030103416447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6835660650411033110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96f9196ff83b6064396ed619993ec3d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Character: {fileID: 0}
 --- !u!1 &6835660650576263841
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,7 +19,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-      if(Application.isEditor == false)
+        CameraPivot.parent = GameObject.Find("Cameras").transform;
+       
+
+        if(Application.isEditor == false)
         SceneManager.LoadScene(1, LoadSceneMode.Additive);
     }
 
