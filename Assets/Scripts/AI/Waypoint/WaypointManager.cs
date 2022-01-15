@@ -6,9 +6,13 @@ using UnityEditor;
 public class WaypointManager : MonoBehaviour
 {
 
+    
     public List<Waypoint> Pathway;
     public bool AlwaysShow = false;
     public bool Loop;
+
+
+
 
 
 #if UNITY_EDITOR
@@ -19,13 +23,14 @@ public class WaypointManager : MonoBehaviour
         {
             if (!Loop)
             {
-                if (Pathway.Count > 0)
+                if (Pathway.Count != 0)
                 {
                     Pathway.Add(new GameObject("Waypoint" + Pathway.Count).AddComponent<Waypoint>());
                     Pathway[Pathway.Count - 1].transform.parent = transform;
                     Pathway[Pathway.Count - 1].transform.position = Pathway[Pathway.Count - 2].transform.position + Pathway[Pathway.Count - 2].transform.forward;
                     Pathway[Pathway.Count - 1].transform.rotation = Pathway[Pathway.Count - 2].transform.rotation;
                     Pathway[Pathway.Count - 1].transform.localScale = Pathway[Pathway.Count - 2].transform.localScale;
+                    Selection.activeGameObject = Pathway[Pathway.Count - 1].gameObject;
                 }
                 else
                 {
@@ -35,15 +40,57 @@ public class WaypointManager : MonoBehaviour
                     Pathway[0].transform.rotation = transform.rotation;
                     Pathway[0].transform.localScale = Vector3.one;
                 }
-
-
-
-                if (!Application.isPlaying)
-                {
-                    Selection.activeGameObject = Pathway[Pathway.Count - 1].gameObject;
-                }
+               
 
             }
+        }
+    }
+    [Button]
+    public void AddWaypointBefore()
+    {
+        if (!Application.isPlaying && Pathway.Count > 1)
+        {
+            if(Selection.activeGameObject.GetComponent<Waypoint>() != Pathway[0])
+            {
+                int sit = Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>());
+                Pathway.Insert(Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>()), new GameObject("Waypoint" + sit).AddComponent<Waypoint>());
+                Pathway[sit].transform.parent = transform;
+                Vector3 midpoint = (Pathway[sit - 1].transform.position - Pathway[sit + 1].transform.position);
+                Quaternion midrotation = Quaternion.Euler(Pathway[sit - 1].transform.eulerAngles - Pathway[sit + 1].transform.eulerAngles);
+                Vector3 midscale = (Pathway[sit - 1].transform.localScale - Pathway[sit + 1].transform.localScale);
+
+                Pathway[sit].transform.position = Pathway[sit + 1].transform.position + midpoint * 0.5f;
+                Pathway[sit].transform.rotation = Quaternion.Euler(Pathway[sit + 1].transform.eulerAngles - (midrotation.eulerAngles).normalized * 0.5f);
+                Pathway[sit].transform.localScale = Pathway[sit + 1].transform.localScale + midscale * 0.5f;
+            }
+        }
+    }
+    [Button]
+    public void AddWaypointAfter()
+    {
+        if (!Application.isPlaying && Pathway.Count > 1)
+        {
+            if(Selection.activeGameObject.GetComponent<Waypoint>() != LastWayPoint())
+            {
+                int sit = Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>());
+                Pathway.Insert(Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>()) + 1, new GameObject("Waypoint" + sit).AddComponent<Waypoint>());
+                sit++;
+                Pathway[sit].transform.parent = transform;
+                Selection.activeGameObject = Pathway[sit].gameObject;
+                Vector3 midpoint = (Pathway[sit - 1].transform.position - Pathway[sit + 1].transform.position);
+                Quaternion midrotation = Quaternion.Euler(Pathway[sit - 1].transform.eulerAngles - Pathway[sit + 1].transform.eulerAngles);
+                Vector3 midscale = (Pathway[sit - 1].transform.localScale - Pathway[sit + 1].transform.localScale);
+
+                Pathway[sit].transform.position = Pathway[sit + 1].transform.position + midpoint * 0.5f;
+                Pathway[sit].transform.rotation = Quaternion.Euler(Pathway[sit + 1].transform.eulerAngles - (midrotation.eulerAngles).normalized * 0.5f);
+                Pathway[sit].transform.localScale = Pathway[sit + 1].transform.localScale + midscale * 0.5f;
+
+            }
+            else
+            {
+                NewWaypoint();
+            }
+
         }
     }
     [Button]
@@ -53,50 +100,14 @@ public class WaypointManager : MonoBehaviour
         {
             Selection.activeGameObject.GetComponent<Waypoint>().AddBranch();
         }
-          
+
     }
     [Button]
     public void RemoveAllBranchingPaths()
     {
-        if(!Application.isPlaying)
+        if (!Application.isPlaying)
         {
             Selection.activeGameObject.GetComponent<Waypoint>().RemoveAllBranches();
-        }
-    }
-    [Button]
-    public void AddWaypointBefore()
-    {
-        if (!Application.isPlaying)
-        {
-            if(Selection.activeGameObject.GetComponent<Waypoint>() != Pathway[0])
-            {
-                int sit = Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>());
-                Pathway.Insert(Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>()), new GameObject("Waypoint" + sit).AddComponent<Waypoint>());
-                Pathway[sit].transform.parent = transform;
-                Vector3 midpoint = (Pathway[sit - 1].transform.position - Pathway[sit + 1].transform.position);
-                Quaternion midrotation = Quaternion.Euler(Pathway[sit - 1].transform.eulerAngles - Pathway[sit + 1].transform.eulerAngles);
-
-                Pathway[sit].transform.position = Pathway[sit + 1].transform.position + midpoint * 0.5f;
-                Pathway[sit].transform.rotation = Quaternion.Euler(Pathway[sit + 1].transform.eulerAngles - (midrotation.eulerAngles).normalized * 0.5f);
-            }
-        }
-    }
-    [Button]
-    public void AddWaypointAfter()
-    {
-        if (!Application.isPlaying)
-        {
-            int sit = Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>());
-            Pathway.Insert(Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>()) + 1, new GameObject("Waypoint" + sit).AddComponent<Waypoint>());
-
-            sit++;
-            Pathway[sit].transform.parent = transform;
-            Selection.activeGameObject = Pathway[sit].gameObject;
-            Vector3 midpoint = (Pathway[sit - 1].transform.position - Pathway[sit + 1].transform.position);
-            Quaternion midrotation = Quaternion.Euler(Pathway[sit - 1].transform.eulerAngles - Pathway[sit + 1].transform.eulerAngles);
-
-            Pathway[sit].transform.position = Pathway[sit + 1].transform.position + midpoint * 0.5f;
-            Pathway[sit].transform.rotation = Quaternion.Euler(Pathway[sit + 1].transform.eulerAngles - (midrotation.eulerAngles).normalized * 0.5f);
         }
     }
     [Button]
@@ -104,12 +115,14 @@ public class WaypointManager : MonoBehaviour
     {
         if (!Application.isPlaying)
         {
-            if (Selection.activeGameObject.GetComponent<Waypoint>())
+            if (Selection.activeGameObject.GetComponent<Waypoint>() && Selection.activeGameObject.GetComponent<Waypoint>() != Pathway[0])
             {
                 foreach (GameObject g in Selection.gameObjects)
                 {
+                    int wayindex = Pathway.IndexOf(g.GetComponent<Waypoint>());
                     Pathway.Remove(g.GetComponent<Waypoint>());
                     Object.DestroyImmediate(g.gameObject);
+                    Selection.activeGameObject = Pathway[wayindex - 1].gameObject;
                 }
             }
         }
@@ -148,16 +161,22 @@ public class WaypointManager : MonoBehaviour
             }
 
 
+
+
             //adds the first waypoint to the last index as well
             if (Loop)
             {
                 if (Pathway[0] != LastWayPoint())
+                {
+                    Pathway[0].previousWaypoint = Pathway[Pathway.Count - 1];
                     Pathway.Add(Pathway[0]);
+                }   
             }
             //Removes the first waypoint from last index so you can loop
             else if (LastWayPoint() == Pathway[0])
             {
                 Pathway.RemoveAt(Pathway.Count - 1);
+                Pathway[0].previousWaypoint = null;
             }
         }
 
@@ -195,12 +214,16 @@ public class WaypointManager : MonoBehaviour
             if (Loop)
             {
                 if (Pathway[0] != LastWayPoint())
+                {
+                    Pathway[0].previousWaypoint = Pathway[Pathway.Count - 1];
                     Pathway.Add(Pathway[0]);
+                }
             }
             //Removes the first waypoint from last index so you can loop
             else if (LastWayPoint() == Pathway[0])
             {
                 Pathway.RemoveAt(Pathway.Count - 1);
+                Pathway[0].previousWaypoint = null;
             }
         }
 

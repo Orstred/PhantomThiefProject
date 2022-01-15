@@ -9,11 +9,13 @@ public class PlayerMotor : MonoBehaviour
 
     #region Instantiation
     CharacterController _controller;
+    PlayerCharacter _playercharacter;
     Transform playergraphic;
     Transform Cameraparent;
     Transform _transform;
     private void Start()
     {
+        _playercharacter = GetComponent<PlayerCharacter>();
         _controller = GetComponent<CharacterController>();
         playergraphic = GameManager.instance.PlayerGraphic;
         Cameraparent = GameManager.instance.CameraPivot;
@@ -24,7 +26,7 @@ public class PlayerMotor : MonoBehaviour
 
     #region Movement Stats
 
-    public float WalkSpeed = 5, RunSpeed = 15;
+    public float WalkSpeed = 10, RunSpeed = 20, CrouchSpeed = 5;
 
     public float TurnSpeed = 10;
 
@@ -39,7 +41,11 @@ public class PlayerMotor : MonoBehaviour
 
 
     #region Local Variables
+    //movement
     float currentspeed;
+    bool iscrouching = false;
+    bool isrunning = false;
+
     Vector3 gravityvelocity;
     #endregion
 
@@ -75,7 +81,23 @@ public class PlayerMotor : MonoBehaviour
 
         #region Movement Inputs
         //Switches between running and walking speeds
-        currentspeed = (currentspeed != RunSpeed) && Input.GetButtonDown("ToggleRun") || (Input.anyKey) && (currentspeed == RunSpeed) && (!Input.GetButtonDown("ToggleRun")) ? RunSpeed : WalkSpeed;
+        if (Input.GetButtonDown("ToggleRun"))
+        {
+            currentspeed = RunSpeed;
+            isrunning = !isrunning;
+            iscrouching = false;
+        } 
+        else if (Input.GetButtonDown("ToggleCrouch"))
+        {
+            currentspeed = CrouchSpeed;
+            isrunning = false;
+            iscrouching = !iscrouching;
+        }
+        else if(!isrunning && !iscrouching || Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            currentspeed = WalkSpeed;
+        }
+
 
         //WASD Inputs
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)

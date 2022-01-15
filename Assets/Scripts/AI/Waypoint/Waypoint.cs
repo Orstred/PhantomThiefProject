@@ -3,8 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEditor;
+
+
+
 public class Waypoint : MonoBehaviour
 {
+
+
+    //Instances
+    public Waypoint previousWaypoint;
+    public Waypoint nextWaypoint;
+
+    #region Advanced Options Branching
+    //Branching path options
+    [Foldout("Advanced Options")]
+    public bool Branching;
+
+    [Foldout("Advanced Options")]
+    [ShowIf("Branching")]
+    public List<WaypointManager> Branch;
+
+    [Foldout("Advanced Options")]
+    [ShowIf("Branching")]
+    [Range (0,1)]
+    public float BranchChance;
+
+    [Foldout("Advanced Options")]
+    [ShowIf("Branching")]
+    public bool BranchIn;
+
+    [Foldout("Advanced Options")]
+    [ShowIf("Branching")]
+    public int EntryPoint;
+    #endregion
+
+    #region Advanced Options Events
+    //Pathway events options
+    [Foldout("Advanced Options")]
+    [HorizontalLine(1f, EColor.White)]
+    public GameObject[] InterestPoints;
+    #endregion
+
+    [HideInInspector]
+    public float widht = 1;
+    [HideInInspector]
+    public bool alwaysshow = true;
 
 
 
@@ -25,33 +68,52 @@ public class Waypoint : MonoBehaviour
     {
         GetComponentInParent<WaypointManager>().AddWaypointBefore();
     }
+    [ShowIf("Branching")]
     [Button]
     public void AddBranch()
     {
+        Branching = true;
         Branch.Add(new GameObject("BranchPath" + Branch.Count).AddComponent<WaypointManager>());
+        Branch[Branch.Count - 1].transform.parent = transform;
         Selection.activeGameObject = Branch[Branch.Count - 1].gameObject;
         Selection.activeGameObject.transform.position = transform.position;
+        Selection.activeGameObject.transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y + 90, transform.eulerAngles.z);
+
+
+        Selection.activeGameObject.GetComponent<WaypointManager>().NewWaypoint();
+        Selection.activeGameObject.GetComponent<WaypointManager>().NewWaypoint();
+
     }
     [Button]
     public void Remove()
     {
         GetComponentInParent<WaypointManager>().RemoveWaypoint();
     }
-    public Waypoint previousWaypoint;
-    public Waypoint nextWaypoint;
-    public List <WaypointManager> Branch;
-    public float BranchChance;
-    public float BranchIn;
-    [HideInInspector]
-    public float widht = 1;
+    [ShowIf("Branching")]
+    [Button]
+    public void RemoveAllBranches()
+    {
+
+        foreach (WaypointManager m in Branch)
+        {
+            Branch.Remove(m);
+            DestroyImmediate(m.gameObject);
+        }
+        Branching = false;
+
+    }
 
 
-    [HideInInspector]
-    public bool alwaysshow = false;
+
+
+
+
+
+
+
 
     public Vector3 GetPosition()
-    {
-       // Gizmos.DrawLine(i.transform.position - i.transform.right * i.widht / 2f, i.transform.position + i.transform.right * i.widht / 2f);
+    {  
         Vector3 minbound = (transform.position + transform.right * widht / 2f);
         Vector3 maxbound = (transform.position - transform.right * widht / 2f);
 
@@ -60,15 +122,7 @@ public class Waypoint : MonoBehaviour
 
 
 
-    public void RemoveAllBranches()
-    {
-        foreach (WaypointManager m in Branch)
-        {
-            Branch.Remove(m);
-            DestroyImmediate(m.gameObject);
-        }
-        
-    }
+   
 
     private void OnDrawGizmos()
     {
@@ -80,7 +134,11 @@ public class Waypoint : MonoBehaviour
         widht = transform.localScale.x;
         alwaysshow = transform.parent.GetComponent<WaypointManager>().AlwaysShow;
         if (!alwaysshow)
-                Gizmos.DrawSphere(transform.position, .1f);
+        Gizmos.DrawSphere(transform.position, .1f);
+
+        Gizmos.color = Color.blue;
+       // if(Branching)
+       // Gizmos.DrawLine(transform.position, Branch[0].Pathway[EntryPoint].transform.position);
         
     }
 

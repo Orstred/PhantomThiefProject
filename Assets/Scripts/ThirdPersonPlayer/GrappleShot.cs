@@ -10,6 +10,7 @@ public class GrappleShot : MonoBehaviour
     #region Instances
 
     //Camera instances
+    [Foldout("Instances")]
     public CinemachineVirtualCamera ReelingInCamera;
     Camera MainCamera;
     Transform MainCameraTransform;
@@ -19,7 +20,7 @@ public class GrappleShot : MonoBehaviour
     LineRenderer _ropegraphic;
     [Foldout("Instances")]
     public RectTransform GrappleCrosshair;
-    [Foldout("Instances")]
+    
 
     //PlayerCharacter Components instantiation
     Transform PlayerCharacter;
