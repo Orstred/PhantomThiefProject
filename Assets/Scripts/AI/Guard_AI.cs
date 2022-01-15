@@ -9,10 +9,6 @@ public class Guard_AI : Enemy
     //private instances
     AudioSource voice;
 
-
-    float TimerOne = 0;
-
-
     public override void Guard_Start()
     {
         base.Guard_Start();
@@ -38,6 +34,10 @@ public class Guard_AI : Enemy
     }
     public override void Patroll()
     {
+        if(PatrollPath == null)
+        {
+            State = NPCStates.Guard;
+        }
         base.Patroll();
     }
     public override void NPC_Event()
@@ -51,19 +51,6 @@ public class Guard_AI : Enemy
     public override void Alert()
     {
         base.Alert();
-        if(TimerOne > 0)
-        {
-            TimerOne -= Time.deltaTime;
-            agent.destination = playercharacter.transform.position;
-        }
-        else 
-        {
-            agent.destination = transform.position;
-
-           
-            Patroll();
-        }
-       
     }
     public override void Chasing()
     {
@@ -76,7 +63,7 @@ public class Guard_AI : Enemy
     public override void OnPlayerEnterView()
     {
         State = NPCStates.Chasing;
-        if (!voice.isPlaying && TimerOne <=0)
+        if (!voice.isPlaying)
             voice.Play();
     }
     public override void OnPlayerStayInView()
@@ -86,8 +73,7 @@ public class Guard_AI : Enemy
     public override void OnPlayerExitView()
     {
         base.OnPlayerExitView();
-        TimerOne = AttentionSpan;
-        State = NPCStates.Alert;
+        State = NPCStates.Patroll;
     }
 
 

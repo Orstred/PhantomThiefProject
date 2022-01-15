@@ -16,9 +16,9 @@ public class Enemy : NPC
     [HorizontalLine(2f, EColor.Gray)]
     [Header("COMBAT OPTIONS")]
     public float MeleeDistance = 2.5f;
+    public float MeleeDamage;
     [ShowIf("hasGun")]
     public float ShootDistance = 35f;
-    public float MeleeDamage;
     [ShowIf("hasGun")]
     public float BulletDamage;
     public bool hasGun;
@@ -71,8 +71,11 @@ public class Enemy : NPC
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, MeleeDistance);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, ShootDistance);
+        if (hasGun)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, ShootDistance);
+        }
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(GuardPosition, .4f);
 

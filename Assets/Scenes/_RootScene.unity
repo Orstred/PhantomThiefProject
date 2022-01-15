@@ -666,10 +666,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b759c81a1f68524394ea29431292eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameStates: 0
+  MainVolume: 50
+  SFXVolume: 50
+  OST:
+  - name: Raid
+    clip: {fileID: 8300000, guid: bc1fb9a14835c624db63ae9ed31559cb, type: 3}
+    localVolume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Techno
+    clip: {fileID: 8300000, guid: 3c3d7c1c7665ed540919d6167e1dce84, type: 3}
+    localVolume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
   playercharacter: {fileID: 6434043488105702489}
   CameraPivot: {fileID: 1664463861}
   PlayerGraphic: {fileID: 9171856198058527265}
-  GameStates: 0
 --- !u!4 &1453661397
 Transform:
   m_ObjectHideFlags: 0
@@ -1100,22 +1115,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 400199750, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.747
-      objectReference: {fileID: 0}
-    - target: {fileID: 1484911336, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.044404
-      objectReference: {fileID: 0}
-    - target: {fileID: 1484911336, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.8587319
-      objectReference: {fileID: 0}
-    - target: {fileID: 1484911336, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -10.217274
-      objectReference: {fileID: 0}
     - target: {fileID: 1484911338, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
       propertyPath: m_Follow
       value: 

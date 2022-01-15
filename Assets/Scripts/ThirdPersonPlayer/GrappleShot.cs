@@ -38,6 +38,8 @@ public class GrappleShot : MonoBehaviour
     public float ReelStopDistance;
     [Foldout("Stats & Options")]
     public float GrappleShotRange;
+    [Foldout("Stats & Options")]
+    public LayerMask Ignore;
     #endregion
 
 
@@ -90,7 +92,7 @@ public class GrappleShot : MonoBehaviour
         Ray ray = MainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit hit;
         float dist = (MainCameraTransform.position - GrappleCrosshair.position).magnitude;
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit,GrappleShotRange,~Ignore))
         {
           
             LastRaycastPosition = hit.point;

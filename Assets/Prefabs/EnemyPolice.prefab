@@ -4328,7 +4328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 537a1b251928f654cb58e6e4c64346c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  State: 0
+  State: 2
   PatrollPath: {fileID: 0}
   WalkSpeed: 5
   RunSpeed: 15
@@ -4338,9 +4338,10 @@ MonoBehaviour:
   isfollowingpath: 0
   VisionCone: {fileID: 3914702493084432948}
   AttentionSpan: 3
+  GuardPosition: {x: -7, y: 0, z: -6}
   MeleeDistance: 2.5
-  ShootDistance: 35
   MeleeDamage: 1
+  ShootDistance: 35
   BulletDamage: 0
-  hasGun: 1
+  hasGun: 0
   playercharacter: {fileID: 0}
