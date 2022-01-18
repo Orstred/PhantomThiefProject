@@ -1253,7 +1253,7 @@ MonoBehaviour:
   GrappleCrosshair: {fileID: 1206537473674207862}
   ReelingSpeed: 100
   ReelStopDistance: 0.5
-  GrappleShotRange: 0
+  GrappleShotRange: 1000
   Ignore:
     serializedVersion: 2
     m_Bits: 244

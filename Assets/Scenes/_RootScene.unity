@@ -667,8 +667,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameStates: 0
-  MainVolume: 50
-  SFXVolume: 50
+  MainVolume: 1
+  SFXVolume: 1
   OST:
   - name: Raid
     clip: {fileID: 8300000, guid: bc1fb9a14835c624db63ae9ed31559cb, type: 3}
@@ -677,9 +677,15 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
   - name: Techno
-    clip: {fileID: 8300000, guid: 3c3d7c1c7665ed540919d6167e1dce84, type: 3}
-    localVolume: 1
+    clip: {fileID: 8300000, guid: 4852fd3a03536b54fa453fd2f6b0630e, type: 3}
+    localVolume: 0.557
     pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Wind
+    clip: {fileID: 8300000, guid: 715771c51322c824dbdc3ae02c0037fc, type: 3}
+    localVolume: 1
+    pitch: 1.65
     loop: 0
     source: {fileID: 0}
   playercharacter: {fileID: 6434043488105702489}
