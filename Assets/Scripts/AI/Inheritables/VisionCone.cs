@@ -10,7 +10,7 @@ public class VisionCone : MonoBehaviour
     private void Start()
     {
         _controller = GetComponentInParent<Enemy>();
-        playercharacter = GameManager.instance.playercharacter.GetComponent<PlayerCharacter>();
+        playercharacter = GameManager.instance.Playercharacter.GetComponent<PlayerCharacter>();
     }
 
 

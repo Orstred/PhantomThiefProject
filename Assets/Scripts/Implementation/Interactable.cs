@@ -5,22 +5,21 @@ public class Interactable : MonoBehaviour
 
     public float Range;
     public Transform InteractionRoot;
-    Transform playercharacter;
-    bool interactabledistance;
-    [HideInInspector]
-    public GameManager Manager;
+
+    private Transform playercharacter;
+    private bool interactabledistance;
+   
+    protected GameManager Manager;
 
 
 
-    private void Start()
+    protected void Start()
     {
         Manager = GameManager.instance;
-        playercharacter = GameManager.instance.playercharacter.transform;
+        playercharacter = GameManager.instance.Playercharacter.transform;
     }
 
-
-
-    private void Update()
+    protected void Update()
     {
         if(Manager.CurrentInteraction == null || Manager.CurrentInteraction == gameObject)
         {

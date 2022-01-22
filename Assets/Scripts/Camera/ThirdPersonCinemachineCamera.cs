@@ -14,7 +14,7 @@ public class ThirdPersonCinemachineCamera : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _transform = transform;
-        PlayerCharacter = GameManager.instance.playercharacter;
+        PlayerCharacter = GameManager.instance.Playercharacter;
     }
     private void Update()
     {

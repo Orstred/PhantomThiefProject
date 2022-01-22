@@ -668,7 +668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentInteraction: {fileID: 0}
-  MusicVolume: 1
+  musicVolume: 1
   SFXVolume: 1
   OST:
   - name: kid appears
@@ -690,9 +690,9 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
   SFX: []
-  playercharacter: {fileID: 6434043488105702489}
-  CameraPivot: {fileID: 1664463861}
-  PlayerGraphic: {fileID: 9171856198058527265}
+  Playercharacter: {fileID: 6434043488105702489}
+  Camerapivot: {fileID: 1664463861}
+  Playergraphic: {fileID: 9171856198058527265}
 --- !u!4 &1453661397
 Transform:
   m_ObjectHideFlags: 0
@@ -1246,6 +1246,14 @@ PrefabInstance:
     - target: {fileID: 3631829532254498334, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
       propertyPath: TurnSpeed
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631829532254498334, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: playerWeight
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631829532254498334, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: groundLayers.m_Bits
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3631829532254498335, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
       propertyPath: m_RootOrder

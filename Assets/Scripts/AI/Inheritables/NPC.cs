@@ -24,11 +24,10 @@ public class NPC : MonoBehaviour
     public bool BackAndForth;
     public bool isGoingForward;
 
+
     //private variables
-    [HideInInspector]
-    public NavMeshAgent agent;
-    [HideInInspector]
-    public bool isfollowingpath;
+    protected NavMeshAgent agent;
+    protected bool isfollowingpath;
    
     
 

@@ -43,26 +43,26 @@ public class GameManager : MonoBehaviour
     [HorizontalLine(2, EColor.Gray)]
     [Header("AUDIO OPTIONS")]
     [Range(0,1)]
-    public float MusicVolume = 1f;
+    public float musicVolume = 1f;
     [Range(0, 1)]
     public float SFXVolume = 1f;
     public Sound[] OST;
     public Sound[] SFX;
-    AudioSource MainSpeaker;
+    AudioSource _mainspeaker;
 
 
     [HorizontalLine(2, EColor.Gray)]
     [Header("GLOBAL INSTANCES")]
-    public Transform playercharacter;
-    public Transform CameraPivot;
-    public Transform PlayerGraphic;
+    public Transform Playercharacter;
+    public Transform Camerapivot;
+    public Transform Playergraphic;
 
 
     private void Start()
     {
-        CameraPivot.parent = GameObject.Find("Cameras").transform;
+        Camerapivot.parent = GameObject.Find("Cameras").transform;
         DontDestroyOnLoad(gameObject);
-        MainSpeaker = GetComponent<AudioSource>();
+        _mainspeaker = GetComponent<AudioSource>();
         if(Application.isEditor == false)
         SceneManager.LoadScene(1, LoadSceneMode.Additive);
     }
@@ -77,11 +77,11 @@ public class GameManager : MonoBehaviour
     public void PlayOST(string name)
     {
         Sound s = Array.Find(OST, Sound => Sound.name == name);
-        MainSpeaker.clip = s.clip;
-        MainSpeaker.loop = s.loop;
-        MainSpeaker.pitch = s.pitch;
-        MainSpeaker.volume = s.localVolume * MusicVolume;
-        MainSpeaker.Play();
+        _mainspeaker.clip = s.clip;
+        _mainspeaker.loop = s.loop;
+        _mainspeaker.pitch = s.pitch;
+        _mainspeaker.volume = s.localVolume * musicVolume;
+        _mainspeaker.Play();
     }
 
     public void PlaySFX(string name)
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
         s.source = gameObject.AddComponent<AudioSource>();
         s.source.clip = s.clip;
 
-        s.source.volume = s.localVolume * MusicVolume;
+        s.source.volume = s.localVolume * musicVolume;
         s.source.pitch = s.pitch;
         s.source.loop = s.loop;
     }

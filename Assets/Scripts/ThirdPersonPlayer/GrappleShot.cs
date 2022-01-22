@@ -60,7 +60,7 @@ public class GrappleShot : MonoBehaviour
         GrappleCrosshair.SetParent(null);
         ReelingInCamera.transform.parent = GameObject.Find("Cameras").transform; 
         //Public Instantiation
-        CameraPivot = GameManager.instance.CameraPivot;
+        CameraPivot = GameManager.instance.Camerapivot;
         MainCamera = Camera.main;
         MainCameraTransform = MainCamera.transform;
 
@@ -70,7 +70,7 @@ public class GrappleShot : MonoBehaviour
 
 
         //Player Character component instantiation
-        PlayerCharacter = GameManager.instance.playercharacter.gameObject.transform;
+        PlayerCharacter = GameManager.instance.Playercharacter.gameObject.transform;
         motor = PlayerCharacter.GetComponent<PlayerMotor>();
         controller = PlayerCharacter.GetComponent<CharacterController>();
 

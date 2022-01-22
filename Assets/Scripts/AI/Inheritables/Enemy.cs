@@ -38,7 +38,7 @@ public class Enemy : NPC
     public virtual void Guard_Start()
     {
         VisionCone.AddComponent<VisionCone>();
-        playercharacter = GameManager.instance.playercharacter.GetComponent<PlayerCharacter>();
+        playercharacter = GameManager.instance.Playercharacter.GetComponent<PlayerCharacter>();
     }
 
 
