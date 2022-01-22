@@ -50,6 +50,8 @@ public class PlayerMotor : MonoBehaviour
     #endregion
 
 
+
+
     private void Update()
     {
         #region Gravity
@@ -97,7 +99,11 @@ public class PlayerMotor : MonoBehaviour
         {
             currentspeed = WalkSpeed;
         }
-
+        else if(!Input.anyKey && !iscrouching)
+        {
+            currentspeed = WalkSpeed;
+            isrunning = false;    
+        }
 
         //WASD Inputs
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
@@ -130,7 +136,7 @@ public class PlayerMotor : MonoBehaviour
     {
         float CameraYRotation = Cameraparent.eulerAngles.y;
 
-        transform.rotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(0, CameraYRotation + A, 0), Time.deltaTime * TurnSpeed);
+         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, CameraYRotation + GetKeyboardInputAxisAngle(), 0), Time.deltaTime * TurnSpeed); 
 
         _controller.Move(transform.forward * Time.deltaTime * currentspeed);
     }
@@ -139,27 +145,6 @@ public class PlayerMotor : MonoBehaviour
     {
         gravityvelocity.y = Mathf.Sqrt(jumheight * 2f * Weight);
     }
-
-    //Moves the parent to the same position as the player graphic
-    public void ResetRootPos()
-    {
-        _controller.enabled = false;
-        _transform.SetParent(playergraphic, true);
-        _transform.localPosition = Vector3.zero;
-        playergraphic.SetParent(_transform);
-        _controller.enabled = true;
-    }
-
-    //Moves the parent to a given position relative to the child
-    public void MoveParent(Transform parent, Transform child, Vector3 NewPosition)
-    {
-        _controller.enabled = false;
-        parent.parent.SetParent(child);
-        parent.localPosition = NewPosition;
-        child.parent.SetParent(parent);
-        _controller.enabled = true;
-    }
-
 
     private void OnDrawGizmosSelected()
     {

@@ -168,7 +168,6 @@ public class GrappleShot : MonoBehaviour
 
     private void LateUpdate()
     {
-
         GrappleCrosshair.LookAt(MainCamera.transform.position);
     }
 

@@ -6,7 +6,7 @@ using NaughtyAttributes;
 using UnityEngine.Audio;
 using System;
 [System.Serializable]
-public class SoundClip
+public class Sound
 {
     public string name;
     public AudioClip clip;
@@ -19,9 +19,6 @@ public class SoundClip
     public AudioSource source;
 }
 
-[System.Serializable]
-public enum gamestates {inProgress,Loss, victory}
-
 public class GameManager : MonoBehaviour
 {
     #region Singleton
@@ -30,26 +27,14 @@ public class GameManager : MonoBehaviour
     {
         //singleton setup
         instance = this;
-
-
-        //Audio manager setup
-        foreach(SoundClip s in OST)
-        {
-            s.source = gameObject.AddComponent<AudioSource>();
-            s.source.clip = s.clip;
-
-            s.source.volume = s.localVolume * MainVolume;
-            s.source.pitch = s.pitch;
-            s.source.loop = s.loop;
-        }
     }
     #endregion
 
 
 
-    [HorizontalLine(2,EColor.Gray)]
-    [Header("MANAGER OPTIONS")]
-    public gamestates GameStates;
+    [HorizontalLine(2, EColor.Gray)]
+    [Header("INTERACTION MANAGER OPTIONS")]
+    public GameObject CurrentInteraction;
      
 
 
@@ -58,11 +43,12 @@ public class GameManager : MonoBehaviour
     [HorizontalLine(2, EColor.Gray)]
     [Header("AUDIO OPTIONS")]
     [Range(0,1)]
-    public float MainVolume = 1f;
+    public float MusicVolume = 1f;
     [Range(0, 1)]
     public float SFXVolume = 1f;
-    public SoundClip[] OST;
-
+    public Sound[] OST;
+    public Sound[] SFX;
+    AudioSource MainSpeaker;
 
 
     [HorizontalLine(2, EColor.Gray)]
@@ -72,67 +58,17 @@ public class GameManager : MonoBehaviour
     public Transform PlayerGraphic;
 
 
-
-
-
-
-
-
-
     private void Start()
     {
         CameraPivot.parent = GameObject.Find("Cameras").transform;
         DontDestroyOnLoad(gameObject);
-
+        MainSpeaker = GetComponent<AudioSource>();
         if(Application.isEditor == false)
         SceneManager.LoadScene(1, LoadSceneMode.Additive);
     }
 
 
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            PlayOST(0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            PlayOST(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            PlayOST(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            PlayOST(3);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            PlayOST(4);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            PlayOST(5);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            PlayOST(6);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            PlayOST(7);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            PlayOST(8);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            PlayOST(9);
-        }
-    }
 
 
 
@@ -140,23 +76,25 @@ public class GameManager : MonoBehaviour
 
     public void PlayOST(string name)
     {
-        SoundClip s = Array.Find(OST, SoundClip => SoundClip.name == name);
-        if (s == null)
-        {
-            Debug.Log("OST " + name + " not found");
-            return;
-        }
-           
-
-
-        s.source.Play();
+        Sound s = Array.Find(OST, Sound => Sound.name == name);
+        MainSpeaker.clip = s.clip;
+        MainSpeaker.loop = s.loop;
+        MainSpeaker.pitch = s.pitch;
+        MainSpeaker.volume = s.localVolume * MusicVolume;
+        MainSpeaker.Play();
     }
 
-    public void PlayOST(int Track)
+    public void PlaySFX(string name)
     {
-        if(OST[Track] != null)
-        OST[Track].source.Play();
+        Sound s = Array.Find(SFX, Sound => Sound.name == name);
+        s.source = gameObject.AddComponent<AudioSource>();
+        s.source.clip = s.clip;
+
+        s.source.volume = s.localVolume * MusicVolume;
+        s.source.pitch = s.pitch;
+        s.source.loop = s.loop;
     }
+
 }
 
 
