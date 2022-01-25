@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 [System.Serializable]
-public enum PlayerStates { walking, Crouching, Running, Grappling, Driving}
+public enum PlayerStates { Walking, Crouching, Running, Grappling, Driving, Falling}
 
 public class PlayerCharacter : MonoBehaviour
 {
@@ -14,15 +14,16 @@ public class PlayerCharacter : MonoBehaviour
     public Transform PlayerHeadDetector;
     public Transform PlayerChestDetector;
 
-    float HeadHeight;
 
+    private float headheight;
 
-    bool isrunning;
-    bool iscrouching;
+    private bool isrunning;
+    private bool iscrouching;
+
 
     private void Start()
     {
-        HeadHeight = PlayerHeadDetector.position.y;
+        headheight = PlayerHeadDetector.position.y;
     }
 
     private void Update()
@@ -43,7 +44,7 @@ public class PlayerCharacter : MonoBehaviour
         }
         else if (!isrunning && !iscrouching || Input.GetKeyDown(KeyCode.Mouse1))
         {
-            State = PlayerStates.walking;
+            State = PlayerStates.Walking;
             transform.localScale = new Vector3(1f, 1f, 1f);
         }
 
@@ -54,7 +55,7 @@ public class PlayerCharacter : MonoBehaviour
         }
         else if(State != PlayerStates.Crouching)
         {
-            PlayerHeadDetector.position = new Vector3(transform.position.x, HeadHeight, transform.position.z);
+            PlayerHeadDetector.position = new Vector3(transform.position.x, headheight, transform.position.z);
         }
     }
 

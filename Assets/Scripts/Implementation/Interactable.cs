@@ -3,27 +3,27 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
 
-    public float Range;
+    public float interactionRange;
     public Transform InteractionRoot;
 
     private Transform playercharacter;
     private bool interactabledistance;
    
-    protected GameManager Manager;
+    protected GameManager manager;
 
 
 
     protected void Start()
     {
-        Manager = GameManager.instance;
+        manager = GameManager.instance;
         playercharacter = GameManager.instance.Playercharacter.transform;
     }
 
     protected void Update()
     {
-        if(Manager.CurrentInteraction == null || Manager.CurrentInteraction == gameObject)
+        if(manager.CurrentInteraction == null || manager.CurrentInteraction == gameObject)
         {
-            if (Vector3.Distance(InteractionRoot.transform.position, playercharacter.position) <= Range)
+            if (Vector3.Distance(InteractionRoot.transform.position, playercharacter.position) <= interactionRange)
             {
                 if (!interactabledistance)
                 {
@@ -52,7 +52,7 @@ public class Interactable : MonoBehaviour
     public virtual void OnInteractionDistanceEnter()
     {
         interactabledistance = true;
-        Manager.CurrentInteraction = gameObject;
+        manager.CurrentInteraction = gameObject;
         Debug.Log("Entered Interaction distance of  " + transform.name);
     }
     public virtual void OnInteractionDistanceStay()
@@ -63,7 +63,7 @@ public class Interactable : MonoBehaviour
     public virtual void OnInteractctionDistanceExit()
     {
         interactabledistance = false;
-        Manager.CurrentInteraction = null;
+        manager.CurrentInteraction = null;
         Debug.Log("Exited Interaction distance of  " + transform.name);
     }
 
@@ -75,6 +75,6 @@ public class Interactable : MonoBehaviour
         if (InteractionRoot == null)
             InteractionRoot = transform;
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(InteractionRoot.position, Range);
+        Gizmos.DrawWireSphere(InteractionRoot.position, interactionRange);
     }
 }

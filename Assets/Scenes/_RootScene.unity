@@ -1239,6 +1239,26 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 2055703102}
+    - target: {fileID: 3631829532254498275, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: reelingSpeed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631829532254498275, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: grappleShotRange
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631829532254498275, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: jumpableDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631829532254498275, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: reelStopDistance
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631829532254498275, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: ignoreLayer.m_Bits
+      value: 192
+      objectReference: {fileID: 0}
     - target: {fileID: 3631829532254498328, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
       propertyPath: m_Name
       value: Playercharacter

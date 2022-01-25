@@ -8,46 +8,47 @@ public class GrappleShot : MonoBehaviour
 
 
     #region Instances
-
     //Camera instances
     [Foldout("Instances")]
     public CinemachineVirtualCamera ReelingInCamera;
-    Camera MainCamera;
-    Transform MainCameraTransform;
-    Transform CameraPivot;
+    private Camera maincamera;
+    private Transform maincameratransform;
+    private Transform camerapivot;
+
 
     //Grapple instances
-    LineRenderer _ropegraphic;
     [Foldout("Instances")]
     public RectTransform GrappleCrosshair;
-    
+    private LineRenderer _ropegraphic;
+
 
     //PlayerCharacter Components instantiation
-    Transform PlayerCharacter;
-    PlayerMotor motor;
-    CharacterController controller;
-
+    private Transform PlayerCharacter;
+    private PlayerMotor motor;
+    private CharacterController controller;
     #endregion
 
 
 
     #region Stats & Options
     [Foldout("Stats & Options")]
-    public float ReelingSpeed;
+    public float reelingSpeed = 100f;
     [Foldout("Stats & Options")]
-    public float ReelStopDistance;
+    public float reelStopDistance = 0.2f;
     [Foldout("Stats & Options")]
-    public float GrappleShotRange;
+    public float jumpableDistance = 0.4f;
     [Foldout("Stats & Options")]
-    public LayerMask Ignore;
+    public float grappleShotRange = 10000;
+    [Foldout("Stats & Options")]
+    public LayerMask ignoreLayer;
     #endregion
 
 
 
     #region local variables
-    bool isReeling = false;
-    bool isGrappling = false;
-    Vector3 LastRaycastPosition;
+    private bool isreeling = false;
+    private bool isgrappling = false;
+    private Vector3 lastrayposition;
     #endregion
 
 
@@ -60,9 +61,9 @@ public class GrappleShot : MonoBehaviour
         GrappleCrosshair.SetParent(null);
         ReelingInCamera.transform.parent = GameObject.Find("Cameras").transform; 
         //Public Instantiation
-        CameraPivot = GameManager.instance.Camerapivot;
-        MainCamera = Camera.main;
-        MainCameraTransform = MainCamera.transform;
+        camerapivot = GameManager.instance.Camerapivot;
+        maincamera = Camera.main;
+        maincameratransform = maincamera.transform;
 
 
         //Local instantiation
@@ -74,7 +75,7 @@ public class GrappleShot : MonoBehaviour
         motor = PlayerCharacter.GetComponent<PlayerMotor>();
         controller = PlayerCharacter.GetComponent<CharacterController>();
 
-        Ray ray = MainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        Ray ray = maincamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
@@ -89,13 +90,13 @@ public class GrappleShot : MonoBehaviour
 
 
         #region Raycast
-        Ray ray = MainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        Ray ray = maincamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit hit;
-        float dist = (MainCameraTransform.position - GrappleCrosshair.position).magnitude;
-        if (Physics.Raycast(ray, out hit,GrappleShotRange,~Ignore))
+        float dist = (maincameratransform.position - GrappleCrosshair.position).magnitude;
+        if (Physics.Raycast(ray, out hit,grappleShotRange,~ignoreLayer))
         {
           
-            LastRaycastPosition = hit.point;
+            lastrayposition = hit.point;
             if (GrappleCrosshair.parent == null && hit.transform.tag != "Player")
             {
                 //Makes the crosshair always have the same screen size
@@ -103,7 +104,7 @@ public class GrappleShot : MonoBehaviour
                 GrappleCrosshair.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Mathf.Lerp(GrappleCrosshair.sizeDelta.y, dist / 8, Time.deltaTime * 60));
 
                 GrappleCrosshair.position = hit.point;
-                GrappleCrosshair.SetParent(MainCameraTransform, true); 
+                GrappleCrosshair.SetParent(maincameratransform, true); 
 
             }
         }
@@ -111,7 +112,7 @@ public class GrappleShot : MonoBehaviour
         {
 
             GrappleCrosshair.SetParent(null, true);  
-            GrappleCrosshair.position = LastRaycastPosition;
+            GrappleCrosshair.position = lastrayposition;
 
         }
         //Makes crosshair always have the same screen size
@@ -129,7 +130,7 @@ public class GrappleShot : MonoBehaviour
             }
         if (Input.GetButton("Fire1"))
             {
-                if (isReeling)
+                if (isreeling)
                 {
                     OnGrappleStay();
 
@@ -144,7 +145,7 @@ public class GrappleShot : MonoBehaviour
 
 
         //Reeel in
-        if (isGrappling)
+        if (isgrappling)
         {
             if (Input.GetButtonDown("Fire2"))
             {
@@ -152,7 +153,7 @@ public class GrappleShot : MonoBehaviour
             }
             if (Input.GetButton("Fire2"))
             {
-                if (isReeling)
+                if (isreeling)
                 {
                     OnReelStay();
                 }
@@ -168,7 +169,7 @@ public class GrappleShot : MonoBehaviour
 
     private void LateUpdate()
     {
-        GrappleCrosshair.LookAt(MainCamera.transform.position);
+        GrappleCrosshair.LookAt(maincamera.transform.position);
     }
 
 
@@ -183,28 +184,28 @@ public class GrappleShot : MonoBehaviour
 
     public void OnGrappleStart()
     {
-        isReeling = true;
-        isGrappling = true;
+        isreeling = true;
+        isgrappling = true;
         _ropegraphic.enabled = true;
-        _ropegraphic.SetPosition(1, LastRaycastPosition);
+        _ropegraphic.SetPosition(1, lastrayposition);
         
     }
     public void OnGrappleStay()
     {
-        _ropegraphic.SetPosition(0, CameraPivot.position);
+        _ropegraphic.SetPosition(0, camerapivot.position);
     
     }
     public void OnGrappleExtit()
     {
-        isReeling = false;
-        isGrappling = false;
+        isreeling = false;
+        isgrappling = false;
         _ropegraphic.enabled = false;
         OnReelExit();
     }
 
     public void OnReelStart()
     {
-        isReeling = true;
+        isreeling = true;
         motor.enabled = false;
         controller.enabled = false;
         PlayerCharacter.LookAt(_ropegraphic.GetPosition(1));
@@ -212,9 +213,15 @@ public class GrappleShot : MonoBehaviour
     }
     public void OnReelStay()
     {
-        if(Vector3.Distance(PlayerCharacter.position, _ropegraphic.GetPosition(1)) > ReelStopDistance) 
+        if (Input.GetButton("Jump") && Vector3.Distance(PlayerCharacter.position, _ropegraphic.GetPosition(1)) <= jumpableDistance)
         {
-            PlayerCharacter.position = Vector3.Lerp(PlayerCharacter.position, _ropegraphic.GetPosition(1), (Time.deltaTime * ReelingSpeed) / Vector3.Distance(PlayerCharacter.position, _ropegraphic.GetPosition(1)));
+            OnReelExit();
+            OnGrappleExtit();
+            motor.Jump(5);
+        }
+        if (Vector3.Distance(PlayerCharacter.position, _ropegraphic.GetPosition(1)) > reelStopDistance) 
+        {
+            PlayerCharacter.position = Vector3.Lerp(PlayerCharacter.position, _ropegraphic.GetPosition(1), (Time.deltaTime * reelingSpeed) / Vector3.Distance(PlayerCharacter.position, _ropegraphic.GetPosition(1)));
         }
         else if(Input.GetButtonDown("Jump"))
         {
@@ -222,17 +229,17 @@ public class GrappleShot : MonoBehaviour
             OnGrappleExtit();
             motor.Jump(5);
         }
-       
+
     }
     public void OnReelExit()
     {
       
-            isReeling = false;
+            isreeling = false;
             motor.enabled = true;
             controller.enabled = true;
             PlayerCharacter.rotation = Quaternion.Euler(0, PlayerCharacter.eulerAngles.y, 0);
             motor.Jump(0.01f);
-        if(isGrappling)
+        if(isgrappling)
         OnGrappleExtit();
         ReelingInCamera.Priority = 0;
 

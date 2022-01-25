@@ -5,9 +5,9 @@ using NaughtyAttributes;
 
 public class Destructable : Interactable
 {
-    [ShowIf("UseSeparateMesh")]
+    [ShowIf("useSeparateMesh")]
     public Transform DestroyedMesh;
-    public bool UseSeparateMesh;
+    public bool useSeparateMesh;
 
 
 
@@ -23,7 +23,7 @@ public class Destructable : Interactable
     {
         foreach (Transform t in GetComponentsInChildren<Transform>())
         {
-            if (!UseSeparateMesh)
+            if (!useSeparateMesh)
             {
                 t.parent = null;
                 t.gameObject.AddComponent<Rigidbody>();
@@ -33,7 +33,7 @@ public class Destructable : Interactable
                 Destroy(t.gameObject);
             }
         }
-        if (UseSeparateMesh)
+        if (useSeparateMesh)
         {
            Instantiate(DestroyedMesh, transform.position, transform.rotation);
         }
