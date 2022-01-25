@@ -693,6 +693,7 @@ MonoBehaviour:
   Playercharacter: {fileID: 6434043488105702489}
   Camerapivot: {fileID: 1664463861}
   Playergraphic: {fileID: 9171856198058527265}
+  inMenu: 0
 --- !u!4 &1453661397
 Transform:
   m_ObjectHideFlags: 0
@@ -927,7 +928,7 @@ MonoBehaviour:
   xAxis:
     Value: 166.28526
     m_SpeedMode: 0
-    m_MaxSpeed: 100
+    m_MaxSpeed: 50
     m_AccelTime: 0
     m_DecelTime: 0.05
     m_InputAxisName: Mouse X
@@ -945,7 +946,7 @@ MonoBehaviour:
   yAxis:
     Value: 2.389562
     m_SpeedMode: 0
-    m_MaxSpeed: 100
+    m_MaxSpeed: 50
     m_AccelTime: 0
     m_DecelTime: 0.05
     m_InputAxisName: Mouse Y
@@ -1235,10 +1236,18 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 1664463861}
+    - target: {fileID: 1513613515, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: ToolWheel
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1206537473674207859, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 2055703102}
+    - target: {fileID: 3631829532254498275, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3631829532254498275, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
       propertyPath: reelingSpeed
       value: 100

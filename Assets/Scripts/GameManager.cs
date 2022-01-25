@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
     public Transform Playercharacter;
     public Transform Camerapivot;
     public Transform Playergraphic;
-
+    public bool inMenu = false;
 
     private void Start()
     {

@@ -122,9 +122,28 @@ public class ToolWheelUI : MonoBehaviour
             r.gameObject.SetActive(false);
         }
         g.SetActive(true);
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && g.GetComponent<UIItem>() != null)
         {
             Debug.Log("Used: " + g.name);
+
+            UIItem i = new UIItem();
+            g.gameObject.TryGetComponent<UIItem>(out i);
+            i.OnInteract();
+
+        }
+   
+    }
+
+    private void OnDisable()
+    {
+        foreach (RectTransform r in Actives)
+        {
+            if (r.gameObject.activeSelf && r.GetComponent<UIItem>() != null)
+            {
+                UIItem i = null;
+                r.TryGetComponent<UIItem>(out i);
+                i.OnInteract();
+            }
         }
 
     }

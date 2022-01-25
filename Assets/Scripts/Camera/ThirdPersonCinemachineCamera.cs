@@ -9,6 +9,8 @@ public class ThirdPersonCinemachineCamera : MonoBehaviour
     public Cinemachine.AxisState yAxis;
     Transform _transform;
     Transform PlayerCharacter;
+
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -16,13 +18,14 @@ public class ThirdPersonCinemachineCamera : MonoBehaviour
         _transform = transform;
         PlayerCharacter = GameManager.instance.Playercharacter;
     }
+
+
     private void Update()
     {
-        xAxis.Update(Time.fixedDeltaTime);
-        yAxis.Update(Time.fixedDeltaTime);
+            xAxis.Update(Time.fixedDeltaTime);
+            yAxis.Update(Time.fixedDeltaTime);
 
-        _transform.eulerAngles = new Vector3(yAxis.Value, xAxis.Value, 0);
-       
+            _transform.eulerAngles = new Vector3(yAxis.Value, xAxis.Value, 0);      
     }
     private void LateUpdate()
     {
