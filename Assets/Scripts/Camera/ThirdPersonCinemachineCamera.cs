@@ -16,20 +16,25 @@ public class ThirdPersonCinemachineCamera : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _transform = transform;
-        PlayerCharacter = GameManager.instance.Playercharacter;
+        PlayerCharacter = GameManager.instance.playerCharacter;
+        if (!Application.isEditor)
+        {
+            xAxis.m_MaxSpeed /= 2;
+            yAxis.m_MaxSpeed /= 2;
+        }
     }
 
 
     private void Update()
     {
-            xAxis.Update(Time.fixedDeltaTime);
-            yAxis.Update(Time.fixedDeltaTime);
+            xAxis.Update(Time.deltaTime);
+            yAxis.Update(Time.deltaTime);
 
             _transform.eulerAngles = new Vector3(yAxis.Value, xAxis.Value, 0);      
     }
     private void LateUpdate()
     {
-        transform.position = PlayerCharacter.transform.position + Vector3.up * 1.79f;
+        _transform.position = PlayerCharacter.transform.position + Vector3.up * 1.79f;
     }
 
 

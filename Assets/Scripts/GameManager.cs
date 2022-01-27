@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using NaughtyAttributes;
 using UnityEngine.Audio;
 using System;
+
+
 [System.Serializable]
 public class Sound
 {
@@ -15,10 +17,12 @@ public class Sound
     [Range(0.1f,3)]
     public float pitch = 1;
     public bool loop;
-   [HideInInspector]
+    [Range(0, 100)]
+    public float Propagation = 0;
+    [HideInInspector]
     public AudioSource source;
-}
 
+}
 public class GameManager : MonoBehaviour
 {
     #region Singleton
@@ -34,10 +38,7 @@ public class GameManager : MonoBehaviour
 
     [HorizontalLine(2, EColor.Gray)]
     [Header("INTERACTION MANAGER OPTIONS")]
-    public GameObject CurrentInteraction;
-     
-
-
+    public GameObject currentInteraction;
 
 
     [HorizontalLine(2, EColor.Gray)]
@@ -53,22 +54,23 @@ public class GameManager : MonoBehaviour
 
     [HorizontalLine(2, EColor.Gray)]
     [Header("GLOBAL INSTANCES")]
-    public Transform Playercharacter;
-    public Transform Camerapivot;
-    public Transform Playergraphic;
+    public Transform playerCharacter;
+    public Transform cameraPivot;
+    public Transform playerGraphic;
     public bool inMenu = false;
+
+
+
+
+
+
 
     private void Start()
     {
-        Camerapivot.parent = GameObject.Find("Cameras").transform;
-        DontDestroyOnLoad(gameObject);
-        _mainspeaker = GetComponent<AudioSource>();
-        if(Application.isEditor == false)
-        SceneManager.LoadScene(1, LoadSceneMode.Additive);
+        cameraPivot.parent = GameObject.Find("Cameras").transform;
+       _mainspeaker = GetComponent<AudioSource>();
+        SceneManager.LoadScene(2, LoadSceneMode.Additive);
     }
-
-
-
 
 
 

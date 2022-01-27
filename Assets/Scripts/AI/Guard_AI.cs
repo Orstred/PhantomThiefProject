@@ -9,9 +9,9 @@ public class Guard_AI : Enemy
     //private instances
     AudioSource voice;
 
-    public override void Guard_Start()
+    public override void Enemy_Start()
     {
-        base.Guard_Start();
+        base.Enemy_Start();
         voice = GetComponent<AudioSource>();
     }
 
@@ -38,6 +38,7 @@ public class Guard_AI : Enemy
         {
             State = NPCStates.Guard;
         }
+        else
         base.Patroll();
     }
     public override void NPC_Event()

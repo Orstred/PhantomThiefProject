@@ -4,10 +4,10 @@ public class Interactable : MonoBehaviour
 {
 
     public float interactionRange;
-    public Transform InteractionRoot;
+    public Transform interactionRoot;
 
-    private Transform playercharacter;
-    private bool interactabledistance;
+    protected Transform playercharacter;
+    protected bool interactabledistance;
    
     protected GameManager manager;
 
@@ -16,14 +16,14 @@ public class Interactable : MonoBehaviour
     protected void Start()
     {
         manager = GameManager.instance;
-        playercharacter = GameManager.instance.Playercharacter.transform;
+        playercharacter = GameManager.instance.playerCharacter.transform;
     }
 
     protected void Update()
     {
-        if(manager.CurrentInteraction == null || manager.CurrentInteraction == gameObject)
+        if(manager.currentInteraction == null || manager.currentInteraction == gameObject)
         {
-            if (Vector3.Distance(InteractionRoot.transform.position, playercharacter.position) <= interactionRange)
+            if (Vector3.Distance(interactionRoot.transform.position, playercharacter.position) <= interactionRange)
             {
                 if (!interactabledistance)
                 {
@@ -52,7 +52,7 @@ public class Interactable : MonoBehaviour
     public virtual void OnInteractionDistanceEnter()
     {
         interactabledistance = true;
-        manager.CurrentInteraction = gameObject;
+        manager.currentInteraction = gameObject;
         Debug.Log("Entered Interaction distance of  " + transform.name);
     }
     public virtual void OnInteractionDistanceStay()
@@ -63,7 +63,7 @@ public class Interactable : MonoBehaviour
     public virtual void OnInteractctionDistanceExit()
     {
         interactabledistance = false;
-        manager.CurrentInteraction = null;
+        manager.currentInteraction = null;
         Debug.Log("Exited Interaction distance of  " + transform.name);
     }
 
@@ -72,9 +72,9 @@ public class Interactable : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (InteractionRoot == null)
-            InteractionRoot = transform;
+        if (interactionRoot == null)
+            interactionRoot = transform;
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(InteractionRoot.position, interactionRange);
+        Gizmos.DrawWireSphere(interactionRoot.position, interactionRange);
     }
 }

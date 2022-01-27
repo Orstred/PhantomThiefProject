@@ -50,62 +50,70 @@ public class Waypoint : MonoBehaviour
     public bool alwaysshow = true;
 
 
-
+#if UNITY_EDITOR
     [Button]
     public void AddPointInFront()
     {
-        if(nextWaypoint != null)
+        if (Application.isEditor)
         {
-            GetComponentInParent<WaypointManager>().AddWaypointAfter();
+            if (nextWaypoint != null)
+            {
+                GetComponentInParent<WaypointManager>().AddWaypointAfter();
+            }
+            else
+            {
+                GetComponentInParent<WaypointManager>().NewWaypoint();
+            }
         }
-        else
-        {
-            GetComponentInParent<WaypointManager>().NewWaypoint();
-        }
+
     }
     [Button]
     public void AddPointAtBack()
     {
+        if(Application.isEditor)
         GetComponentInParent<WaypointManager>().AddWaypointBefore();
     }
     [ShowIf("Branching")]
     [Button]
     public void AddBranch()
     {
-        Branching = true;
-        Branch.Add(new GameObject("BranchPath" + Branch.Count).AddComponent<WaypointManager>());
-        Branch[Branch.Count - 1].transform.parent = transform;
-        Selection.activeGameObject = Branch[Branch.Count - 1].gameObject;
-        Selection.activeGameObject.transform.position = transform.position;
-        Selection.activeGameObject.transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y + 90, transform.eulerAngles.z);
+        
+        
+            Branching = true;
+            Branch.Add(new GameObject("BranchPath" + Branch.Count).AddComponent<WaypointManager>());
+            Branch[Branch.Count - 1].transform.parent = transform;
+            Selection.activeGameObject = Branch[Branch.Count - 1].gameObject;
+            Selection.activeGameObject.transform.position = transform.position;
+            Selection.activeGameObject.transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y + 90, transform.eulerAngles.z);
 
 
-        Selection.activeGameObject.GetComponent<WaypointManager>().NewWaypoint();
-        Selection.activeGameObject.GetComponent<WaypointManager>().NewWaypoint();
+            Selection.activeGameObject.GetComponent<WaypointManager>().NewWaypoint();
+            Selection.activeGameObject.GetComponent<WaypointManager>().NewWaypoint();
+
+    
 
     }
     [Button]
     public void Remove()
     {
-        GetComponentInParent<WaypointManager>().RemoveWaypoint();
+     
+            GetComponentInParent<WaypointManager>().RemoveWaypoint();
     }
     [ShowIf("Branching")]
     [Button]
     public void RemoveAllBranches()
     {
 
-        foreach (WaypointManager m in Branch)
-        {
-            Branch.Remove(m);
-            DestroyImmediate(m.gameObject);
-        }
-        Branching = false;
+        
+            foreach (WaypointManager m in Branch)
+            {
+                Branch.Remove(m);
+                DestroyImmediate(m.gameObject);
+            }
+            Branching = false;
 
     }
-
-
-
-
+#endif
 
 
 

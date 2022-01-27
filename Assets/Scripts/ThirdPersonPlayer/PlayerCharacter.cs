@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 [System.Serializable]
-public enum PlayerStates { Walking, Crouching, Running, Grappling, Driving, Falling}
+public enum PlayerStates { Walking, Crouching, Running, Grappling}
 
 public class PlayerCharacter : MonoBehaviour
 {
@@ -14,11 +14,10 @@ public class PlayerCharacter : MonoBehaviour
     public Transform PlayerHeadDetector;
     public Transform PlayerChestDetector;
 
-
+ 
     private float headheight;
 
-    private bool isrunning;
-    private bool iscrouching;
+    
 
 
     private void Start()
@@ -28,34 +27,37 @@ public class PlayerCharacter : MonoBehaviour
 
     private void Update()
     {
+        //Switches between states
         if (Input.GetButtonDown("ToggleRun"))
         {
             State = PlayerStates.Running;
-            isrunning = !isrunning;
-            iscrouching = false;
-            transform.localScale = Vector3.one;
         }
         else if (Input.GetButtonDown("ToggleCrouch"))
         {
-            State = PlayerStates.Crouching;
-            isrunning = false;
-            iscrouching = !iscrouching;
-            transform.localScale =new Vector3(1f, .5f, 1f);
+            if(State != PlayerStates.Crouching)
+            {
+                State = PlayerStates.Crouching;
+            }
+            else
+            {
+                State = PlayerStates.Walking;
+            }
         }
-        else if (!isrunning && !iscrouching || Input.GetKeyDown(KeyCode.Mouse1))
+        else if (State != PlayerStates.Running && State != PlayerStates.Crouching || Input.GetKeyDown(KeyCode.Mouse1))
         {
-            State = PlayerStates.Walking;
-            transform.localScale = new Vector3(1f, 1f, 1f);
+            State = PlayerStates.Walking; 
         }
 
 
         if (State == PlayerStates.Crouching)
         {
             PlayerHeadDetector.position = PlayerChestDetector.position;
+            transform.localScale = new Vector3(1f, .3f, 1f);
         }
         else if(State != PlayerStates.Crouching)
         {
             PlayerHeadDetector.position = new Vector3(transform.position.x, headheight, transform.position.z);
+            transform.localScale = new Vector3(1f, 1f, 1f);
         }
     }
 

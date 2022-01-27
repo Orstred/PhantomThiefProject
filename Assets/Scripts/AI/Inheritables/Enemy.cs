@@ -8,11 +8,14 @@ using NaughtyAttributes;
 public class Enemy : NPC
 {
 
+    //Player Detection Options
     [HorizontalLine(2f, EColor.Gray)]
     [Header("ENEMY OPTIONS")]
     public GameObject VisionCone;
     public float AttentionSpan;
     public Vector3 GuardPosition;
+
+    //Melee and range options
     [HorizontalLine(2f, EColor.Gray)]
     [Header("COMBAT OPTIONS")]
     public float MeleeDistance = 2.5f;
@@ -22,8 +25,7 @@ public class Enemy : NPC
     [ShowIf("hasGun")]
     public float BulletDamage;
     public bool hasGun;
-    [HideInInspector]
-    public PlayerCharacter playercharacter;
+    protected PlayerCharacter playercharacter;
 
 
 
@@ -31,14 +33,14 @@ public class Enemy : NPC
     public override void _Start()
     {
         base._Start();
-        Guard_Start();
+        Enemy_Start();
     }
 
 
-    public virtual void Guard_Start()
+    public virtual void Enemy_Start()
     {
         VisionCone.AddComponent<VisionCone>();
-        playercharacter = GameManager.instance.Playercharacter.GetComponent<PlayerCharacter>();
+        playercharacter = GameManager.instance.playerCharacter.GetComponent<PlayerCharacter>();
     }
 
 

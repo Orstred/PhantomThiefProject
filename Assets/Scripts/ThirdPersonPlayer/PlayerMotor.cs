@@ -17,17 +17,23 @@ public class PlayerMotor : MonoBehaviour
     {
         playercharacter = GetComponent<PlayerCharacter>();
         _controller = GetComponent<CharacterController>();
-        playergraphic = GameManager.instance.Playergraphic;
-        cameraparent = GameManager.instance.Camerapivot;
+        playergraphic = GameManager.instance.playerGraphic;
+        cameraparent = GameManager.instance.cameraPivot;
         _transform = transform;
     }
     #endregion
 
 
-  
+
     //Movement Stats
-    public float walkSpeed = 10, runSpeed = 20, crouchSpeed = 5;
-    public float turnSpeed = 10;
+    [HorizontalLine(2f, EColor.Gray)]
+    [Header("MOVEMENT")]
+    public float walkSpeed = 10;
+    public float runSpeed = 20;
+    public float crouchSpeed = 5;
+    public float turnSpeed = 10;        
+    [HorizontalLine(2f, EColor.Gray)]
+    [Header("GRAVITY")]
     public float playerWeight = 50;
     public float jumpHeight = 3;
     public LayerMask groundLayers;
@@ -48,14 +54,14 @@ public class PlayerMotor : MonoBehaviour
 
     private void Update()
     {
-        #region Gravity
+        #region Gravity and Jumping
         bool isGrounded = Physics.CheckSphere(transform.position, 0.2f, groundLayers);
 
         //Calculates gravity when on ground
         if (isGrounded && gravityvelocity.y < 0)
         {
 
-            gravityvelocity.y = -playerWeight;
+            gravityvelocity.y = -15;
 
             if (Input.GetButton("Jump"))
             {
@@ -72,10 +78,9 @@ public class PlayerMotor : MonoBehaviour
 
         //Aplies gravity after calculations
         _controller.Move(gravityvelocity * Time.deltaTime);
-
         #endregion
 
-        #region Movement Inputs
+        #region Movement Inputs and Run/Crouching Toggles
         //Switches between running and walking speeds
         if (Input.GetButtonDown("ToggleRun"))
         {
@@ -89,15 +94,18 @@ public class PlayerMotor : MonoBehaviour
             isrunning = false;
             iscrouching = !iscrouching;
         }
+        //Goes back to walking if no inputs are being received or the player stops walking and is not crouching
         else if(!isrunning && !iscrouching || Input.GetKeyDown(KeyCode.Mouse1))
         {
             currentspeed = walkSpeed;
         }
-        else if(!Input.anyKey && !iscrouching)
+        //Same as above but for controller
+        else if(!Input.anyKey && !iscrouching ||!iscrouching && Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
         {
             currentspeed = walkSpeed;
             isrunning = false;    
         }
+
 
         //WASD Inputs
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
@@ -110,7 +118,7 @@ public class PlayerMotor : MonoBehaviour
 
 
 
-    //Returns angle based on WASD inputs
+    //Returns angle based on WASD inputs and current angle of the camera pivot
     float GetKeyboardInputAxisAngle()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");

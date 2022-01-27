@@ -65,7 +65,7 @@ public class ToolWheelUI : MonoBehaviour
         {
            SelectingButton(Actives[0].gameObject);
         }
-        else if(angle>.9f && angle< 50)
+        else if(angle>1f && angle< 50)
         {
             SelectingButton(Actives[1].gameObject);
         }

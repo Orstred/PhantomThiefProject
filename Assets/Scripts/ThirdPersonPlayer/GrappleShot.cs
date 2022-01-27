@@ -7,6 +7,23 @@ public class GrappleShot : MonoBehaviour
 {
 
 
+
+
+
+
+    #region Stats & Options
+    [Foldout("Stats & Options")]
+    public float reelingSpeed = 100f;
+    [Foldout("Stats & Options")]
+    public float reelStopDistance = 0.2f;
+    [Foldout("Stats & Options")]
+    public float jumpableDistance = 0.4f;
+    [Foldout("Stats & Options")]
+    public float grappleShotRange = 10000;
+    [Foldout("Stats & Options")]
+    public LayerMask ignoreLayer;
+    #endregion
+
     #region Instances
     //Camera instances
     [Foldout("Instances")]
@@ -28,23 +45,6 @@ public class GrappleShot : MonoBehaviour
     private CharacterController controller;
     #endregion
 
-
-
-    #region Stats & Options
-    [Foldout("Stats & Options")]
-    public float reelingSpeed = 100f;
-    [Foldout("Stats & Options")]
-    public float reelStopDistance = 0.2f;
-    [Foldout("Stats & Options")]
-    public float jumpableDistance = 0.4f;
-    [Foldout("Stats & Options")]
-    public float grappleShotRange = 10000;
-    [Foldout("Stats & Options")]
-    public LayerMask ignoreLayer;
-    #endregion
-
-
-
     #region local variables
     private bool isreeling = false;
     private bool isgrappling = false;
@@ -61,7 +61,7 @@ public class GrappleShot : MonoBehaviour
         GrappleCrosshair.SetParent(null);
         ReelingInCamera.transform.parent = GameObject.Find("Cameras").transform; 
         //Public Instantiation
-        camerapivot = GameManager.instance.Camerapivot;
+        camerapivot = GameManager.instance.cameraPivot;
         maincamera = Camera.main;
         maincameratransform = maincamera.transform;
 
@@ -71,7 +71,7 @@ public class GrappleShot : MonoBehaviour
 
 
         //Player Character component instantiation
-        PlayerCharacter = GameManager.instance.Playercharacter.gameObject.transform;
+        PlayerCharacter = GameManager.instance.playerCharacter.gameObject.transform;
         motor = PlayerCharacter.GetComponent<PlayerMotor>();
         controller = PlayerCharacter.GetComponent<CharacterController>();
 
@@ -143,7 +143,7 @@ public class GrappleShot : MonoBehaviour
 
             }
 
-
+        
         //Reeel in
         if (isgrappling)
         {
@@ -239,9 +239,10 @@ public class GrappleShot : MonoBehaviour
             controller.enabled = true;
             PlayerCharacter.rotation = Quaternion.Euler(0, PlayerCharacter.eulerAngles.y, 0);
             motor.Jump(0.01f);
-        if(isgrappling)
+            ReelingInCamera.Priority = 0;
+
+        if (isgrappling)
         OnGrappleExtit();
-        ReelingInCamera.Priority = 0;
 
     }
 

@@ -12,7 +12,7 @@ public class UIItem : MonoBehaviour
     {
         if(Item == PhantomItems.Graplehook)
         {
-            GameManager.instance.Playercharacter.GetComponent<GrappleShot>().enabled = true;
+            GameManager.instance.playerCharacter.GetComponent<GrappleShot>().enabled = true;
         }
     }
 

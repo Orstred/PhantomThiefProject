@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using NaughtyAttributes;
 
 [System.Serializable]
-public enum NPCStates {Idle, Guard, Patroll, NPC_Event, Suspicious, Alert, Chasing}
+public enum NPCStates {Idle, Guard, Patroll, Suspicious, Alert, Chasing, NPC_Event}
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class NPC : MonoBehaviour
@@ -44,9 +44,6 @@ public class NPC : MonoBehaviour
         _Update();
 
     }
-
-
-
 
     public virtual void _Start()
     {
@@ -263,11 +260,6 @@ public class NPC : MonoBehaviour
         }
     }
 
-    public virtual void NPC_Event()
-    {
-
-    }
-
     public virtual void Suspicious()
     {
 
@@ -282,6 +274,12 @@ public class NPC : MonoBehaviour
     {
 
     }
+
+    public virtual void NPC_Event()
+    {
+
+    }
+
 
     public void BranchOff(WaypointManager branch)
     {
