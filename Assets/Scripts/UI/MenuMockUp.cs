@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class menus : MonoBehaviour
+public class MenuMockUp : MonoBehaviour
 {
 
     public RectTransform t;
@@ -26,7 +26,7 @@ public class menus : MonoBehaviour
         if (optionsopen)
         {
             t.rotation = Quaternion.Slerp(t.rotation, Quaternion.identity,Time.deltaTime * 4);
-            t.position = Vector3.Lerp(t.position, new Vector3(startpos.x, startpos.y + 940, startpos.z), Time.deltaTime * 4);
+            t.position = Vector3.Lerp(t.position, new Vector3(startpos.x, startpos.y + 94, startpos.z), Time.deltaTime * 4);
       
         }
         else

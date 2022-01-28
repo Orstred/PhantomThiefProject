@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Prefabs/SandBox/SandboxGuilherme/mensu.unity
+    path: Assets/Scenes/Mockupmenu.unity
     guid: 1480cd24916c877489d9a5c34dffa52e
   - enabled: 1
     path: Assets/Scenes/_RootScene.unity

@@ -13,6 +13,7 @@
 //       \------(o)~~~~(o)------------(o)~~~~(o)--'`---(o)~~~(o)----------------------
 
 
+using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -126,10 +127,18 @@ namespace RadicalForge.Blockout
                 suggestedSection,
                 cameraAnchorSection,
                 othersSection
-            }; 
+            };
 
-            BlockoutEditorSettings.CurrentSceneSetting = Resources.LoadAll<BlockoutSceneSettings>("")
-                .First(x => x.sceneName == SceneManager.GetActiveScene().name);
+            try{
+                BlockoutEditorSettings.CurrentSceneSetting = Resources.LoadAll<BlockoutSceneSettings>("")
+                       .First(x => x.sceneName == SceneManager.GetActiveScene().name);
+            }
+              catch(Exception e)
+            {
+               
+            }
+
+             
             isVisible = true;
             BlockoutEditorHelper.Awake(this);
             EditorHotkeysTracker.Init(this);
