@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestLevel.unity
     guid: e113ca3fd4ad0af4c989b3389ef8a2b1
+  - enabled: 1
+    path: Assets/Scenes/MockupVictoryscreen.unity
+    guid: 28cb1e05f4fda5a429923ec00c3996d9
   m_configObjects: {}

@@ -133,7 +133,7 @@ namespace RadicalForge.Blockout
                 BlockoutEditorSettings.CurrentSceneSetting = Resources.LoadAll<BlockoutSceneSettings>("")
                        .First(x => x.sceneName == SceneManager.GetActiveScene().name);
             }
-              catch(Exception e)
+              catch(Exception)
             {
                
             }

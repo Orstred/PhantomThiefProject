@@ -57,7 +57,6 @@ public class GameManager : MonoBehaviour
     public Transform playerCharacter;
     public Transform cameraPivot;
     public Transform playerGraphic;
-    public bool inMenu = false;
 
 
 
@@ -97,6 +96,10 @@ public class GameManager : MonoBehaviour
         s.source.loop = s.loop;
     }
 
+    public void VictoryScreen()
+    {
+        SceneManager.LoadScene("MockupVictoryscreen");
+    }
 }
 
 

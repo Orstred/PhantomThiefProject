@@ -12,13 +12,16 @@ public class MenuMockUp : MonoBehaviour
     Vector3 startpos;
 
 
+    
 
 
 
     private void Start()
     {
         startpos = t.gameObject.transform.position;
-        source = GetComponent<AudioSource>();
+        TryGetComponent<AudioSource>(out source);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void Update()
@@ -41,9 +44,9 @@ public class MenuMockUp : MonoBehaviour
 
 
 
-    public static void NextLevel()
+    public static void NextLevel(int s)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(s);
 
     }
     public  void OptionsMenu()
@@ -51,4 +54,5 @@ public class MenuMockUp : MonoBehaviour
         optionsopen = !optionsopen;
         source.Play();
     }
+
 }

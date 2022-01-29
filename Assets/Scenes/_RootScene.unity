@@ -517,8 +517,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentInteraction: {fileID: 0}
-  musicVolume: 1
-  SFXVolume: 1
+  musicVolume: 0.5
+  SFXVolume: 0.5
   OST:
   - name: kid appears
     clip: {fileID: 8300000, guid: 0b67e0b05923f614b8aa14912f85a29f, type: 3}
