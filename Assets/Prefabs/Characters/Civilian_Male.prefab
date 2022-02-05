@@ -49,7 +49,7 @@ MonoBehaviour:
   WalkSpeed: 5
   isGoingForward: 1
   allowBranching: 1
-  BackAndForth: 1
+  BackAndForth: 0
 --- !u!1001 &2059326332806940160
 PrefabInstance:
   m_ObjectHideFlags: 0

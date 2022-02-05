@@ -561,7 +561,7 @@ GameObject:
   - component: {fileID: 86064592}
   - component: {fileID: 86064593}
   - component: {fileID: 5427626381036147081}
-  - component: {fileID: 6536074708565407960}
+  - component: {fileID: 540984167}
   m_Layer: 6
   m_Name: EnemyPolice
   m_TagString: Untagged
@@ -695,7 +695,7 @@ NavMeshAgent:
   m_Acceleration: 56.99
   avoidancePriority: 50
   m_AngularSpeed: 260.67
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
@@ -717,7 +717,7 @@ CapsuleCollider:
   m_Height: 2.2117577
   m_Direction: 1
   m_Center: {x: 0.006769657, y: 1.0360489, z: 0.010011375}
---- !u!114 &6536074708565407960
+--- !u!114 &540984167
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -726,21 +726,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8744254688376586023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 537a1b251928f654cb58e6e4c64346c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a479a2217ecf754b9af28b1207fe82a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   State: 2
   PatrollPath: {fileID: 0}
   WalkSpeed: 5
   RunSpeed: 15
-  BackAndForth: 1
+  BackAndForth: 0
   isGoingForward: 1
-  VisionCone: {fileID: 3914702493084432948}
-  AttentionSpan: 3
-  GuardPosition: {x: -7, y: 0, z: -6}
-  MeleeDistance: 2.5
-  MeleeDamage: 1
-  ShootDistance: 35
-  BulletDamage: 0
-  hasGun: 0
-  playercharacter: {fileID: 0}
+  allowBranching: 0

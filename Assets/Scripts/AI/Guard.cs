@@ -4,7 +4,7 @@ using UnityEngine;
 using NaughtyAttributes;
 
 
-public class _Enemy : NPC
+public class Guard : Enemy
 {
 
     [HorizontalLine(2f, EColor.Gray)]
@@ -12,6 +12,16 @@ public class _Enemy : NPC
     public GameObject VisionCone;
     public float AttentionSpan;
     public Vector3 GuardPosition;
+
+    [HorizontalLine(2f, EColor.Gray)]
+    [Header("ENEMY OPTIONS")]
+    public float MeleeDistance;
+    public int MeleeDamage;
+    public bool hasGun;
+    [ShowIf("hasGun")]
+    public float RangedDistance;
+    [ShowIf("hasGun")]
+    public int RangedDamage;
 
 
 

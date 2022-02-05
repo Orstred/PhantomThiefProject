@@ -23,10 +23,6 @@ public class Civilian_Pedestrian : MonoBehaviour
 
     private void Update()
     {
-        
-        
-
-
         if (State == CivilianStates.Idle)
         {
 
@@ -38,6 +34,14 @@ public class Civilian_Pedestrian : MonoBehaviour
             {
                 if (TargetWaypoint.hasEvent) { State = CivilianStates.NPC_EVENT; }
                 else if (allowBranching && TargetWaypoint.isBranching) { BranchOf(); }
+                if(!BackAndForth && !PatrollPath.Loop)
+                {
+                    if(TargetWaypoint == PatrollPath.Pathway[0] || TargetWaypoint == PatrollPath.LastWayPoint())
+                    {
+                        destination = transform.position;
+                        State = CivilianStates.Idle;
+                    }
+                }
             }
 
             //Moves Entity along a waypoint manager
@@ -98,7 +102,6 @@ public class Civilian_Pedestrian : MonoBehaviour
                 isGoingForward = TargetWaypoint.BranchForward;
                 PatrollPath = TargetWaypoint.Branch;
                 TargetWaypoint = TargetWaypoint.Entrypoint;
-
             }
     }
 
