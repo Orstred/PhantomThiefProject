@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using NaughtyAttributes;
 
 [System.Serializable]
-public enum NPCStates {Idle, Guard, Patroll, Suspicious, Alert, Chasing, NPC_Event}
+public enum NPCStates { Idle, Guard, Patroll, Suspicious, Alert, Chasing, NPC_Event }
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class NPC : MonoBehaviour
@@ -14,7 +14,7 @@ public class NPC : MonoBehaviour
     
     
 
-
+    
     //Stats
     [HorizontalLine(2f,EColor.Gray)]
     [Header("AI OPTIONS")]
@@ -28,11 +28,11 @@ public class NPC : MonoBehaviour
     //private variables
     protected NavMeshAgent agent;
     protected bool isfollowingpath;
-   
+    protected Waypoint TargetWaypoint;
     
 
 
-
+    
 
     void Start()
     {
@@ -63,7 +63,7 @@ public class NPC : MonoBehaviour
         }
         else if (State == NPCStates.Patroll)
         {
-            Patroll();
+            FollowPath();
         }
         else if (State == NPCStates.NPC_Event)
         {
@@ -95,169 +95,47 @@ public class NPC : MonoBehaviour
 
     }
 
-    public virtual void Patroll()
+
+    public virtual void FollowPath()
     {
-        //Checks to see if there are branches attached to a waypoint and changes current path based on odds
-        if(Vector3.Distance(transform.position, agent.destination) < 0.1f)
+        //If the agent has no destination go to the closest point
+        if(TargetWaypoint == null)
         {
-            if (ClosestPointInPath().Branching)
+            TargetWaypoint = ClosestPointInPath();
+            agent.SetDestination(TargetWaypoint.GetPosition()); 
+        }
+
+        //If the agent has reached the way point
+        else if(Vector3.Distance(agent.destination,transform.position) < 0.2f)
+        {
+            //Changes the target waypoint to be the next waypoint based on wether it's going forward or back on the path
+            TargetWaypoint = (isGoingForward) ? TargetWaypoint.nextWaypoint : TargetWaypoint.previousWaypoint;
+            agent.SetDestination(TargetWaypoint.GetPosition());
+
+            //Changes target direction if is back and forward and not loop
+            if (BackAndForth && !PatrollPath.Loop)
             {
-                if (Random.Range(0f, 0.99f) < ClosestPointInPath().BranchChance)
+                if(TargetWaypoint == PatrollPath.Pathway[0] || TargetWaypoint == PatrollPath.LastWayPoint())
                 {
-                    BranchOff(ClosestPointInPath().Branch[Random.Range(0,ClosestPointInPath().Branch.Count -1)]);
+                    isGoingForward = !isGoingForward;
                 }
             }
         }
+    }
 
-        //NPC loops around pathway until told otherwise
-        if (PatrollPath.Loop)
+
+    public void BranchOf()
+    {
+       if(Vector3.Distance(transform.position, agent.destination) < 0.1f)
         {
-            //Moves the player forward on the array
-            if (isGoingForward)
+            if (Random.Range(0, 99.9f) < ClosestPointInPath().BranchChance)
             {
-                //Sets the first point to be the closest to player
-                if (!isfollowingpath)
-                {
-                    agent.destination = ClosestPointInPath().GetPosition();
-                    isfollowingpath = true;
-                }
-
-                else if (Vector3.Distance(transform.position, agent.destination) < 0.1f)
-                {
-                    if (ClosestPointInPath().nextWaypoint != null)
-                        agent.destination = ClosestPointInPath().nextWaypoint.GetPosition();
-                }
+                agent.SetDestination(ClosestPointInPath().Entrypoint.GetPosition());
+                PatrollPath = ClosestPointInPath().Branch;
+                isGoingForward = ClosestPointInPath().BranchForward;
             }
-
-            //Moves the player backwards on the array
-            else if(!isGoingForward)
-            {
-                //Sets the first point to be the closest to player
-                if (!isfollowingpath)
-                {
-                    agent.destination = ClosestPointInPath().GetPosition();
-                    isfollowingpath = true;
-                }
-
-                else if (Vector3.Distance(transform.position, agent.destination) < 0.1f)
-                {
-                    if (ClosestPointInPath().previousWaypoint != null)
-                        agent.destination = ClosestPointInPath().previousWaypoint.GetPosition();
-                }
-            }
-
         }
 
-        //Switches NPC direction when last position is reached
-        else if (BackAndForth)
-        {
-            //Moves the player forward on the array
-            if (isGoingForward)
-            {
-                    if (ClosestPointInPath() != PatrollPath.Pathway[PatrollPath.Pathway.Count - 1])
-                    {
-                        //Sets the first point to be the closest to player
-                        if (!isfollowingpath)
-                        {
-                            agent.destination = ClosestPointInPath().GetPosition();
-                            isfollowingpath = true;
-                        }
-
-                        else if (Vector3.Distance(transform.position, agent.destination) < 0.1f)
-                        {
-                            if (ClosestPointInPath().nextWaypoint != null)
-                                agent.destination = ClosestPointInPath().nextWaypoint.GetPosition();
-                        }
-                    }
-                    else
-                    {
-                        if (Vector3.Distance(transform.position, agent.destination) < 0.1f)
-                            isGoingForward = false;
-                    }
-            }
-
-            //Moves the player backwards on the array
-            else if(!isGoingForward)
-            {
-                if (ClosestPointInPath() != PatrollPath.Pathway[0])
-                {
-                    //Sets the first point to be the closest to player
-                    if (!isfollowingpath)
-                    {
-                        agent.destination = ClosestPointInPath().GetPosition();
-                        isfollowingpath = true;
-                    }
-
-                    else if (Vector3.Distance(transform.position, agent.destination) < 0.1f)
-                    {
-                        if (ClosestPointInPath().previousWaypoint != null)
-                            agent.destination = ClosestPointInPath().previousWaypoint.GetPosition();
-                    }
-                }
-                else
-                {
-                    if (Vector3.Distance(transform.position, agent.destination) < 0.1f)
-                        isGoingForward = true;
-                }
-            }
-         
-        }
-
-        //Stops NPC at last point in pathway
-        else
-        {
-
-            //Moves the player forward on the array
-            if (isGoingForward)
-            {
-                if (ClosestPointInPath() != PatrollPath.Pathway[PatrollPath.Pathway.Count - 1])
-                {
-                    //Sets the first point to be the closest to player
-                    if (!isfollowingpath)
-                    {
-                        agent.destination = ClosestPointInPath().GetPosition();
-                        isfollowingpath = true;
-                    }
-
-                    else if (Vector3.Distance(transform.position, agent.destination) < 0.1f)
-                    {
-                        if (ClosestPointInPath().nextWaypoint != null)
-                            agent.destination = ClosestPointInPath().nextWaypoint.GetPosition();
-                    }
-                }
-                else
-                {
-                    if (Vector3.Distance(transform.position, agent.destination) < 0.1f)
-                        agent.destination = transform.position;
-                }
-            }
-
-            //Moves the player backwards on the array
-            else if (!isGoingForward)
-            {
-                if (ClosestPointInPath() != PatrollPath.Pathway[0])
-                {
-                    //Sets the first point to be the closest to player
-                    if (!isfollowingpath)
-                    {
-                        agent.destination = ClosestPointInPath().GetPosition();
-                        isfollowingpath = true;
-                    }
-
-                    else if (Vector3.Distance(transform.position, agent.destination) < 0.1f)
-                    {
-                        if (ClosestPointInPath().previousWaypoint != null)
-                            agent.destination = ClosestPointInPath().previousWaypoint.GetPosition();
-                    }
-                }
-                else
-                {
-                    if (Vector3.Distance(transform.position, agent.destination) < 0.1f)
-                        agent.destination = transform.position;
-                }
-            }
-
-        }
     }
 
     public virtual void Suspicious()
@@ -281,12 +159,7 @@ public class NPC : MonoBehaviour
     }
 
 
-    public void BranchOff(WaypointManager branch)
-    {
-        agent.destination = branch.Pathway[ClosestPointInPath().EntryPoint].GetPosition();
-        isGoingForward = ClosestPointInPath().BranchIn;
-        PatrollPath = branch;  
-    }
+
 
     private Waypoint ClosestPointInPath()
     {
@@ -306,5 +179,5 @@ public class NPC : MonoBehaviour
     }
 
 
-
+    
 }

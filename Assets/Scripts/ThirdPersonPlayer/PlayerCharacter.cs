@@ -1,23 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using NaughtyAttributes;
 
 [System.Serializable]
-public enum PlayerStates { Walking, Crouching, Running, Grappling}
+public enum PlayerStates {Walking, Crouching, Running, Grappling, Falling}
 
 public class PlayerCharacter : MonoBehaviour
 {
-
+    [HorizontalLine(2f, EColor.Gray)]
+    [Header("STEALTH")]
     public PlayerStates State;
 
     public Transform PlayerHeadDetector;
     public Transform PlayerChestDetector;
+    public Transform DarkNotfication;
 
- 
+    public bool inShadow;
+    public List<GameObject> LightSources;
+        
     private float headheight;
 
-    
+
+
+
 
 
     private void Start()
@@ -27,6 +33,7 @@ public class PlayerCharacter : MonoBehaviour
 
     private void Update()
     {
+        #region PlayerStates
         //Switches between states
         if (Input.GetButtonDown("ToggleRun"))
         {
@@ -59,6 +66,11 @@ public class PlayerCharacter : MonoBehaviour
             PlayerHeadDetector.position = new Vector3(transform.position.x, headheight, transform.position.z);
             transform.localScale = new Vector3(1f, 1f, 1f);
         }
+        #endregion
+        #region Stealth 
+        inShadow = (LightSources.Count <= 0);
+        DarkNotfication.gameObject.SetActive(inShadow);
+        #endregion
     }
 
 

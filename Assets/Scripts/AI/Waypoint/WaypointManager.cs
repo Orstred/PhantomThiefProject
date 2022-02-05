@@ -6,12 +6,10 @@ using UnityEditor;
 public class WaypointManager : MonoBehaviour
 {
 
-    
-    public List<Waypoint> Pathway;
-    public bool AlwaysShow = false;
+
+    public List<Waypoint> Pathway = new List<Waypoint>();
     public bool Loop;
-
-
+    public bool isIntersected;
 
 
 
@@ -19,226 +17,194 @@ public class WaypointManager : MonoBehaviour
     [Button]
     public void NewWaypoint()
     {
-        if (!Application.isPlaying)
+        //Adds an waypoint at point 0 and resets its transform
+        if(Pathway.Count == 0)
         {
-            if (!Loop)
-            {
-                if (Pathway.Count != 0)
-                {
-                    Pathway.Add(new GameObject("Waypoint" + Pathway.Count).AddComponent<Waypoint>());
-                    Pathway[Pathway.Count - 1].transform.parent = transform;
-                    Pathway[Pathway.Count - 1].transform.position = Pathway[Pathway.Count - 2].transform.position + Pathway[Pathway.Count - 2].transform.forward;
-                    Pathway[Pathway.Count - 1].transform.rotation = Pathway[Pathway.Count - 2].transform.rotation;
-                    Pathway[Pathway.Count - 1].transform.localScale = Pathway[Pathway.Count - 2].transform.localScale;
-                    Selection.activeGameObject = Pathway[Pathway.Count - 1].gameObject;
-                }
-                else
-                {
-                    Pathway.Add(new GameObject("Waypoint" + Pathway.Count).AddComponent<Waypoint>());
-                    Pathway[0].transform.parent = transform;
-                    Pathway[0].transform.position = transform.position;
-                    Pathway[0].transform.rotation = transform.rotation;
-                    Pathway[0].transform.localScale = Vector3.one;
-                }
-               
-
-            }
+            Pathway.Add(new GameObject().AddComponent<Waypoint>());
+            LastWayPoint().Set();
         }
+        //Adds an waypoint in front of the first waypoint and sets the way point 0 as its previouswaypoint
+        else if (Pathway.Count == 1)
+        {
+             Pathway.Add(new GameObject().AddComponent<Waypoint>());
+             Pathway[0].nextWaypoint = LastWayPoint();
+             LastWayPoint().Set(Pathway[0]);
+        }
+        //Adds an waypoint in front of the previously last waypoint and adds itself as the next waypoint of the previous waypoint
+        else
+        {
+            Pathway.Add(new GameObject().AddComponent<Waypoint>());
+            LastWayPoint().Set(Pathway[Pathway.Count - 2]);
+            LastWayPoint().previousWaypoint.nextWaypoint = LastWayPoint();
+        }
+
+        LastWayPoint().transform.parent = transform;
     }
     [Button]
-    public void AddWaypointBefore()
+    public void RemoveWaypoint()
     {
-        if (!Application.isPlaying && Pathway.Count > 1)
+        if (Selection.activeGameObject.GetComponent<Waypoint>() && Selection.activeGameObject.GetComponent<Waypoint>() != Pathway[0])
         {
-            if(Selection.activeGameObject.GetComponent<Waypoint>() != Pathway[0])
+            foreach (GameObject g in Selection.gameObjects)
             {
-                int sit = Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>());
-                Pathway.Insert(Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>()), new GameObject("Waypoint" + sit).AddComponent<Waypoint>());
-                Pathway[sit].transform.parent = transform;
-                Vector3 midpoint = (Pathway[sit - 1].transform.position - Pathway[sit + 1].transform.position);
-                Quaternion midrotation = Quaternion.Euler(Pathway[sit - 1].transform.eulerAngles - Pathway[sit + 1].transform.eulerAngles);
-                Vector3 midscale = (Pathway[sit - 1].transform.localScale - Pathway[sit + 1].transform.localScale);
+                //Saves the selected objects index removes the object from the list and destroys it
+                int wayindex = Pathway.IndexOf(g.GetComponent<Waypoint>());
+                Pathway.Remove(g.GetComponent<Waypoint>());
+                Object.DestroyImmediate(g.gameObject);
 
-                Pathway[sit].transform.position = Pathway[sit + 1].transform.position + midpoint * 0.5f;
-                Pathway[sit].transform.rotation = Quaternion.Euler(Pathway[sit + 1].transform.eulerAngles - (midrotation.eulerAngles).normalized * 0.5f);
-                Pathway[sit].transform.localScale = Pathway[sit + 1].transform.localScale + midscale * 0.5f;
+                //uses the saved index to select the previous waypoint 
+                Selection.activeGameObject = Pathway[wayindex - 1].gameObject;
+
+                //If current point is not null then select it and assing it's previous waypoint
+                if (Pathway[wayindex].gameObject != null)
+                {
+                    //and attribute the next and previous waypoint to it's neighbors
+                    Selection.activeGameObject.GetComponent<Waypoint>().nextWaypoint = Pathway[wayindex];
+                    Pathway[wayindex].previousWaypoint = Pathway[wayindex - 1];
+                }
             }
+       
         }
     }
     [Button]
     public void AddWaypointAfter()
     {
-        if (!Application.isPlaying && Pathway.Count > 1)
+        //if there is nothing after current waypoint
+        if (Selection.activeGameObject.GetComponent<Waypoint>() == LastWayPoint())
         {
-            if(Selection.activeGameObject.GetComponent<Waypoint>() != LastWayPoint())
-            {
-                int sit = Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>());
-                Pathway.Insert(Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>()) + 1, new GameObject("Waypoint" + sit).AddComponent<Waypoint>());
-                sit++;
-                Pathway[sit].transform.parent = transform;
-                Selection.activeGameObject = Pathway[sit].gameObject;
-                Vector3 midpoint = (Pathway[sit - 1].transform.position - Pathway[sit + 1].transform.position);
-                Quaternion midrotation = Quaternion.Euler(Pathway[sit - 1].transform.eulerAngles - Pathway[sit + 1].transform.eulerAngles);
-                Vector3 midscale = (Pathway[sit - 1].transform.localScale - Pathway[sit + 1].transform.localScale);
+            NewWaypoint();
+        }
+        else
+        {
+            //Gets the index of the next way point
+            int id = Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>()) + 1;
 
-                Pathway[sit].transform.position = Pathway[sit + 1].transform.position + midpoint * 0.5f;
-                Pathway[sit].transform.rotation = Quaternion.Euler(Pathway[sit + 1].transform.eulerAngles - (midrotation.eulerAngles).normalized * 0.5f);
-                Pathway[sit].transform.localScale = Pathway[sit + 1].transform.localScale + midscale * 0.5f;
+            Pathway.Insert(id,new GameObject().AddComponent<Waypoint>());
 
-            }
-            else
-            {
-                NewWaypoint();
-            }
+            //Sets the previous waypoint of the next waypoint and vice versa
+            Pathway[id + 1].previousWaypoint = Pathway[id];
+            Pathway[id - 1].nextWaypoint = Pathway[id];
+
+            //Sets the previous and next waypoint of the new point
+            Pathway[id].Set(Pathway[id - 1], Pathway[id + 1]);
+            Pathway[id].transform.parent = transform;
+        }
+    }
+    [Button]
+    public void AddWaypointBefore()
+    {
+        //if there is nothing after current waypoint
+        if (Selection.activeGameObject.GetComponent<Waypoint>() == Pathway[0])
+        {
+        
 
         }
+        else
+        {
+            //Gets the index of the previous way point
+            int id = Pathway.IndexOf(Selection.activeGameObject.GetComponent<Waypoint>());
+
+            Pathway.Insert(id, new GameObject().AddComponent<Waypoint>());
+
+            //Sets the previous waypoint of the next waypoint and vice versa
+            Pathway[id + 1].previousWaypoint = Pathway[id];
+            Pathway[id - 1].nextWaypoint = Pathway[id];
+
+            //Sets the previous and next waypoint of the new point
+            Pathway[id].Set(Pathway[id - 1], Pathway[id + 1]);
+            Pathway[id].transform.parent = transform;
+        }
+
     }
     [Button]
     public void AddBranchingPath()
     {
-        if (!Application.isPlaying)
+        if (Selection.activeGameObject.GetComponent<Waypoint>())
         {
-            Selection.activeGameObject.GetComponent<Waypoint>().AddBranch();
-        }
+            Waypoint point = Selection.activeGameObject.GetComponent<Waypoint>();
 
+            //Instantiates a new path 
+            point.isBranching = true;
+            point.Branch = new GameObject().AddComponent<WaypointManager>();
+
+
+            //Adds 2 points to path
+            point.Branch.NewWaypoint(); point.Branch.NewWaypoint();
+
+            //Sets the entry point
+            point.Entrypoint = point.Branch.Pathway[1];
+
+            //Sets the transform of the new waypoint manager
+            point.Branch.transform.position = point.transform.position + point.transform.right;
+            point.Branch.transform.Rotate(Vector3.up * 90);
+
+            //Adds a branch on the opposite path for 2 way transport
+            point.Branch.Pathway[0].isBranching = true;
+            point.Branch.Pathway[0].Branch = this;
+            point.Branch.Pathway[0].Entrypoint = Pathway[Pathway.IndexOf(point) - 1];
+
+        }
     }
     [Button]
-    public void RemoveAllBranchingPaths()
+    public void RemoveBranchFromPoint()
     {
-        if (!Application.isPlaying)
+        if (Selection.activeGameObject.GetComponent<Waypoint>())
         {
-            Selection.activeGameObject.GetComponent<Waypoint>().RemoveAllBranches();
+            Selection.activeGameObject.GetComponent<Waypoint>().RemoveBranch();
         }
-    }
-    [Button]
-    public void RemoveWaypoint()
-    {
-        if (!Application.isPlaying)
-        {
-            if (Selection.activeGameObject.GetComponent<Waypoint>() && Selection.activeGameObject.GetComponent<Waypoint>() != Pathway[0])
-            {
-                foreach (GameObject g in Selection.gameObjects)
-                {
-                    int wayindex = Pathway.IndexOf(g.GetComponent<Waypoint>());
-                    Pathway.Remove(g.GetComponent<Waypoint>());
-                    Object.DestroyImmediate(g.gameObject);
-                    Selection.activeGameObject = Pathway[wayindex - 1].gameObject;
-                }
-            }
-        }
-
     }
 #endif
 
 
 
+
+
+
     private void OnDrawGizmos()
     {
-        if (AlwaysShow && Pathway.Count > 1)
+        //Draws the horizontal lines from the waypoints and connects the extremes if there is at least one waypoint
+        if(Pathway.Count > 1)
         {
-            foreach (Waypoint i in Pathway)
+            foreach(Waypoint w in Pathway)
             {
-                //Sets the previous waypoint if it's not out of range
-                if (Pathway.IndexOf(i) != 0) { i.previousWaypoint = Pathway[Pathway.IndexOf(i) - 1]; }
-
-                //Sets the next waypoint if it's not out of range
-                if (i != LastWayPoint()) { i.nextWaypoint = Pathway[Pathway.IndexOf(i) + 1]; }
-
-
-
-                //Draws 2 parallel lines that go from one waypoint to another
-                if (Pathway.IndexOf(i) + 1 < Pathway.Count)
-                {
-                    Gizmos.DrawLine(i.transform.position - i.transform.right * i.widht / 2, i.nextWaypoint.transform.position - i.nextWaypoint.transform.right * i.nextWaypoint.widht / 2);
-                    Gizmos.DrawLine(i.transform.position + i.transform.right * i.widht / 2, i.nextWaypoint.transform.position + i.nextWaypoint.transform.right * i.nextWaypoint.widht / 2);
-                }
-
-                //draws an horizontal line it's diameter being the local x scale of the waypoint
-                DrawHorizontalLine(i);
-
-                //Draws an horizontal line from the two ends of the final waypoint
-                DrawHorizontalLine(LastWayPoint());
+                DrawHorizontalLine(w);
+                ConnectWayPoints(w);
             }
 
 
 
-
-            //adds the first waypoint to the last index as well
             if (Loop)
             {
-                if (Pathway[0] != LastWayPoint())
-                {
-                    Pathway[0].previousWaypoint = Pathway[Pathway.Count - 1];
-                    Pathway.Add(Pathway[0]);
-                }   
+                LastWayPoint().nextWaypoint = Pathway[0];
+                Pathway[0].previousWaypoint = LastWayPoint();
             }
-            //Removes the first waypoint from last index so you can loop
-            else if (LastWayPoint() == Pathway[0])
+            else
             {
-                Pathway.RemoveAt(Pathway.Count - 1);
+                LastWayPoint().nextWaypoint = null;
                 Pathway[0].previousWaypoint = null;
             }
         }
-
     }
-    private void OnDrawGizmosSelected()
-    {
-        if (!AlwaysShow && Pathway.Count > 1)
-        {
-            foreach (Waypoint i in Pathway)
-            {
-                //Sets the previous waypoint if it's not out of range
-                if (Pathway.IndexOf(i) != 0) { i.previousWaypoint = Pathway[Pathway.IndexOf(i) - 1]; }
-
-                //Sets the next waypoint if it's not out of range
-                if (i != LastWayPoint()) { i.nextWaypoint = Pathway[Pathway.IndexOf(i) + 1]; }
-
-
-
-                //Draws 2 parallel lines that go from one waypoint to another
-                if (Pathway.IndexOf(i) + 1 < Pathway.Count)
-                {
-                    Gizmos.DrawLine(i.transform.position - i.transform.right * i.widht / 2, i.nextWaypoint.transform.position - i.nextWaypoint.transform.right * i.nextWaypoint.widht / 2);
-                    Gizmos.DrawLine(i.transform.position + i.transform.right * i.widht / 2, i.nextWaypoint.transform.position + i.nextWaypoint.transform.right * i.nextWaypoint.widht / 2);
-                }
-
-                //draws an horizontal line it's diameter being the local x scale of the waypoint
-                DrawHorizontalLine(i);
-
-                //Draws an horizontal line from the two ends of the final waypoint
-                DrawHorizontalLine(LastWayPoint());
-            }
-
-
-            //adds the first waypoint to the last index as well
-            if (Loop)
-            {
-                if (Pathway[0] != LastWayPoint())
-                {
-                    Pathway[0].previousWaypoint = Pathway[Pathway.Count - 1];
-                    Pathway.Add(Pathway[0]);
-                }
-            }
-            //Removes the first waypoint from last index so you can loop
-            else if (LastWayPoint() == Pathway[0])
-            {
-                Pathway.RemoveAt(Pathway.Count - 1);
-                Pathway[0].previousWaypoint = null;
-            }
-        }
-
-    }
-
 
 
 
     //Draws a line between the 2 extremmes of the waypoint
-    public void DrawHorizontalLine(Waypoint a)
+    void DrawHorizontalLine(Waypoint a)
     {
-        Vector3 minbound = (a.transform.position + a.transform.right * a.widht / 2f);
-        Vector3 maxbound = (a.transform.position - a.transform.right * a.widht / 2f);
+        Vector3 minbound = (a.transform.position + a.transform.right * a.transform.localScale.x);
+        Vector3 maxbound = (a.transform.position - a.transform.right * a.transform.localScale.x);
 
         Gizmos.DrawLine(minbound, maxbound);
+    }
+
+    //Connects the two extremes of two waypoints
+    void ConnectWayPoints(Waypoint a)
+    {
+        if(a.nextWaypoint != null)
+        {
+            Gizmos.DrawLine(a.transform.position - a.transform.right * a.transform.localScale.x, a.nextWaypoint.transform.position - a.nextWaypoint.transform.right * a.nextWaypoint.transform.localScale.x);
+            Gizmos.DrawLine(a.transform.position + a.transform.right * a.transform.localScale.x, a.nextWaypoint.transform.position + a.nextWaypoint.transform.right * a.nextWaypoint.transform.localScale.x);
+        }
     }
 
     //returns the final member of the pathway list
@@ -246,5 +212,4 @@ public class WaypointManager : MonoBehaviour
     {
         return Pathway[Pathway.Count - 1];
     }
-
 }

@@ -61,15 +61,15 @@ public class ToolWheelUI : MonoBehaviour
 
 
         
-        if (angle> -62 && angle<1)
+        if (angle> -62 && angle<0)
         {
            SelectingButton(Actives[0].gameObject);
         }
-        else if(angle>1f && angle< 50)
+        else if(angle>0f && angle< 62)  
         {
             SelectingButton(Actives[1].gameObject);
         }
-        else if (angle > 50f && angle < 85)
+        else if (angle > 62f && angle < 85)
         {
             SelectingButton(Actives[2].gameObject);
         }
@@ -122,14 +122,9 @@ public class ToolWheelUI : MonoBehaviour
             r.gameObject.SetActive(false);
         }
         g.SetActive(true);
-        if (Input.GetKeyDown(KeyCode.Mouse0) && g.GetComponent<UIItem>() != null)
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("Used: " + g.name);
-
-            UIItem i = new UIItem();
-            g.gameObject.TryGetComponent<UIItem>(out i);
-            i.OnInteract();
-
         }
    
     }

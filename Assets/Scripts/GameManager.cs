@@ -68,7 +68,6 @@ public class GameManager : MonoBehaviour
     {
         cameraPivot.parent = GameObject.Find("Cameras").transform;
        _mainspeaker = GetComponent<AudioSource>();
-        SceneManager.LoadScene(2, LoadSceneMode.Additive);
     }
 
 
@@ -85,9 +84,30 @@ public class GameManager : MonoBehaviour
         _mainspeaker.Play();
     }
 
+    public void PlayOST(int id)
+    {
+        Sound s = OST[id];
+        _mainspeaker.clip = s.clip;
+        _mainspeaker.loop = s.loop;
+        _mainspeaker.pitch = s.pitch;
+        _mainspeaker.volume = s.localVolume * musicVolume;
+        _mainspeaker.Play();
+    }
+
     public void PlaySFX(string name)
     {
         Sound s = Array.Find(SFX, Sound => Sound.name == name);
+        s.source = gameObject.AddComponent<AudioSource>();
+        s.source.clip = s.clip;
+
+        s.source.volume = s.localVolume * musicVolume;
+        s.source.pitch = s.pitch;
+        s.source.loop = s.loop;
+    }
+
+    public void PlaySFX(int id)
+    {
+        Sound s = SFX[id];
         s.source = gameObject.AddComponent<AudioSource>();
         s.source.clip = s.clip;
 
