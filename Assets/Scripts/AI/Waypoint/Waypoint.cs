@@ -49,7 +49,7 @@ public class Waypoint : MonoBehaviour
             transform.rotation = prev.transform.rotation;
             transform.localScale = prev.transform.localScale;
         }
-        else
+        else if(prev == null && nex == null)
         {
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;

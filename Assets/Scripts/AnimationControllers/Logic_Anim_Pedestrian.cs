@@ -14,9 +14,10 @@ public class Logic_Anim_Pedestrian : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         parent = GetComponentInParent<Civilian_Pedestrian>();
+        parent.WalkSpeed = Random.Range(3, 6);
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         ResetAnima();
         switch ((int)parent.State)
@@ -26,6 +27,7 @@ public class Logic_Anim_Pedestrian : MonoBehaviour
                 break;
             case(1):
                 anim.SetBool("Walking", true);
+                anim.SetFloat("speed", parent.WalkSpeed);
                 break;
             case (2):
                 anim.SetBool("Idle", true);

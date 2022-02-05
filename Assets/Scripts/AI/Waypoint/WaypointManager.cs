@@ -21,7 +21,8 @@ public class WaypointManager : MonoBehaviour
         if(Pathway.Count == 0)
         {
             Pathway.Add(new GameObject().AddComponent<Waypoint>());
-            LastWayPoint().Set();
+            Pathway[0].transform.parent = transform;
+            Pathway[0].Set();
         }
         //Adds an waypoint in front of the first waypoint and sets the way point 0 as its previouswaypoint
         else if (Pathway.Count == 1)

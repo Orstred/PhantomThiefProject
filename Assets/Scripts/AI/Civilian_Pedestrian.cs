@@ -23,7 +23,8 @@ public class Civilian_Pedestrian : MonoBehaviour
 
     private void Update()
     {
-        hasReachedDestination = Vector3.Distance(transform.position, destination) < 0.1f;
+        
+        
 
 
         if (State == CivilianStates.Idle)
@@ -33,7 +34,7 @@ public class Civilian_Pedestrian : MonoBehaviour
         else if (State == CivilianStates.Patroll)
         {
             //Checks for branching paths and Events on the current waypoint
-            if (hasReachedDestination)
+            if ( TargetWaypoint != null &&hasReachedDestination)
             {
                 if (TargetWaypoint.hasEvent) { State = CivilianStates.NPC_EVENT; }
                 else if (allowBranching && TargetWaypoint.isBranching) { BranchOf(); }
@@ -45,6 +46,7 @@ public class Civilian_Pedestrian : MonoBehaviour
             //Lerps the player to destination
             float dist = (transform.position - destination).magnitude;
             transform.position = Vector3.Lerp(transform.position, destination, (Time.deltaTime * WalkSpeed) / dist);
+            hasReachedDestination = dist < 0.2f;
 
             //Rotates the player to look at destination
             Vector3 direction = destination - transform.position;
@@ -70,10 +72,6 @@ public class Civilian_Pedestrian : MonoBehaviour
         //If the agent has reached the way point
         else if (hasReachedDestination)
         {
-            //Changes the target waypoint to be the next waypoint based on wether it's going forward or back on the path
-            TargetWaypoint = (isGoingForward) ? TargetWaypoint.nextWaypoint : TargetWaypoint.previousWaypoint;
-            destination = TargetWaypoint.GetPosition();
-
             //Changes target direction if is back and forward and not loop
             if (BackAndForth && !PatrollPath.Loop)
             {
@@ -84,6 +82,10 @@ public class Civilian_Pedestrian : MonoBehaviour
             }
 
 
+            //Changes the target waypoint to be the next waypoint based on wether it's going forward or back on the path
+            TargetWaypoint = (isGoingForward) ? TargetWaypoint.nextWaypoint : TargetWaypoint.previousWaypoint;
+            if(TargetWaypoint != null)
+            destination = TargetWaypoint.GetPosition();
         }
     }
 
