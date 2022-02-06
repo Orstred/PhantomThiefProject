@@ -48,7 +48,7 @@ public class SoundWave : MonoBehaviour
             EnemiesInVicinity.Add(other.transform.gameObject);
         }
     }
-
+        
 
     private void OnDrawGizmosSelected()
     {
@@ -57,6 +57,10 @@ public class SoundWave : MonoBehaviour
 
     public void GivePositionToEnemies(List<GameObject> t)
     {
-
+        foreach(GameObject en in t)
+        {
+            en.GetComponent<Enemy>().GetSuspicious(transform.position);
+        }
+        Destroy(gameObject);
     }
 }

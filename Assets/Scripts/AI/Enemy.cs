@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using NaughtyAttributes;
 
 [System.Serializable]
-public enum NPCStates { Idle, Guard, Patroll, Suspicious, Alert, Chasing, NPC_EVENT }
+public enum EnemyState { Idle, Guard, Patroll, Suspicious, Alert, Chasing, NPC_EVENT }
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     //Stats
     [HorizontalLine(2f,EColor.Gray)]
     [Header("AI OPTIONS")]
-    public NPCStates State;
+    public EnemyState State;
     public WaypointManager PatrollPath;
     public float WalkSpeed = 5, RunSpeed = 15;
     public bool BackAndForth;
@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
     protected bool isfollowingpath;
     protected Waypoint TargetWaypoint;
     protected bool hasReachedDestination;
-
+    protected GameObject player;
 
     
 
@@ -53,31 +53,31 @@ public class Enemy : MonoBehaviour
 
     public virtual void _Update()
     {
-        if (State == NPCStates.Idle)
+        if (State == EnemyState.Idle)
         {
             Idle();
         }
-        else if (State == NPCStates.Guard)
+        else if (State == EnemyState.Guard)
         {
             Guard();
         }
-        else if (State == NPCStates.Patroll)
+        else if (State == EnemyState.Patroll)
         {
             Patroll();
         }
-        else if (State == NPCStates.NPC_EVENT)
+        else if (State == EnemyState.NPC_EVENT)
         {
             NPC_Event();
         }
-        else if (State == NPCStates.Suspicious)
+        else if (State == EnemyState.Suspicious)
         {
             Suspicious();
         }
-        else if (State == NPCStates.Alert)
+        else if (State == EnemyState.Alert)
         {
             Alert();
         }
-        else if (State == NPCStates.Chasing)
+        else if (State == EnemyState.Chasing)
         {
             Chasing();
         }
@@ -102,14 +102,14 @@ public class Enemy : MonoBehaviour
         //Checks for branching paths and Events on the current waypoint
         if (hasReachedDestination && TargetWaypoint != null)
         {
-            if (TargetWaypoint.hasEvent) {State = NPCStates.NPC_EVENT; }
+            if (TargetWaypoint.hasEvent) {State = EnemyState.NPC_EVENT; }
             else if (allowBranching && TargetWaypoint.isBranching) {BranchOf();}
             if (!BackAndForth && !PatrollPath.Loop)
             {
                 if (TargetWaypoint == PatrollPath.Pathway[0] || TargetWaypoint == PatrollPath.LastWayPoint())
                 {
                     agent.stoppingDistance = .4f;
-                    State = NPCStates.Idle;
+                    State = EnemyState.Idle;
                     agent.SetDestination(transform.position);
                     agent.stoppingDistance = 0.1f;
                 }
@@ -135,7 +135,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Chasing()
     {
-
+           
     }
 
     public virtual void NPC_Event()
@@ -186,6 +186,7 @@ public class Enemy : MonoBehaviour
             TargetWaypoint = TargetWaypoint.Entrypoint;
         }
     }
+
     private Waypoint ClosestPointInPath()
     {
         Waypoint p = null;
@@ -204,5 +205,34 @@ public class Enemy : MonoBehaviour
     }
 
 
-    
+    public virtual void OnPlayerEnterVision(GameObject g)
+    {
+   
+    }
+    public virtual void OnPlayerStayInVision(GameObject g)
+    {
+
+    }
+    public virtual void OnPlayerExitVision(GameObject g)
+    {
+
+    }
+
+    public virtual void OnPlayerEnterPeripheralVision(Vector3 suspos)
+    {
+
+    }
+    public virtual void OnPlayerStayInPeripheralVision(Vector3 suspos)
+    {
+
+    }
+    public virtual void OnPlayerExitPeripheralVision(Vector3 suspos)
+    {
+
+    }
+
+    public void GetSuspicious(Vector3 point)
+    {
+
+    }
 }

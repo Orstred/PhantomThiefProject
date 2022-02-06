@@ -14,7 +14,7 @@ public class LightRaycast : MonoBehaviour
     Transform _transform;
     Transform player;
     Vector3 po;
-
+    
 
 
      // Start is called before the first frame update
@@ -70,6 +70,7 @@ public class LightRaycast : MonoBehaviour
         {
             if (other.tag == "Player")
             {
+                player = other.transform;
                 other.GetComponent<PlayerCharacter>().LightSources.Add(gameObject);
             }
         }
@@ -78,6 +79,7 @@ public class LightRaycast : MonoBehaviour
     {
         if (isTrigger)
         {
+            player = GameManager.instance.playerCharacter;
             if (other.tag == "Player")
             {
                 other.GetComponent<PlayerCharacter>().LightSources.Remove(gameObject);
@@ -85,6 +87,14 @@ public class LightRaycast : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        player.GetComponent<PlayerCharacter>().LightSources.Remove(gameObject); 
+    }
+    private void OnDestroy()
+    {
+        player.GetComponent<PlayerCharacter>().LightSources.Remove(gameObject);
+    }
 
     private void OnDrawGizmos()
     {
