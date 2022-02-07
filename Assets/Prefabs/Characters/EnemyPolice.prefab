@@ -896,7 +896,7 @@ MonoBehaviour:
   allowBranching: 0
   VisionCone: {fileID: 145605847569541528}
   PeripheralVisionCone: {fileID: 266567830}
-  AttentionSpan: 0
+  AttentionSpan: 3
   GuardPosition: {x: 0, y: 0, z: 0}
   Detect:
     serializedVersion: 2
