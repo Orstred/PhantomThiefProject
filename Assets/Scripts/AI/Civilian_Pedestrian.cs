@@ -9,7 +9,7 @@ public class Civilian_Pedestrian : MonoBehaviour
 
     public CivilianStates State = CivilianStates.Patroll;
     public WaypointManager PatrollPath;
-    public float WalkSpeed = 5;
+    public float WalkSpeed;
     public bool isGoingForward;
     public bool allowBranching = true;
     public bool BackAndForth;
@@ -19,6 +19,13 @@ public class Civilian_Pedestrian : MonoBehaviour
     private Vector3 destination;
     private Waypoint TargetWaypoint;
     private bool hasReachedDestination;
+
+
+    private void Start()
+    {
+        WalkSpeed = Random.Range(3, 7);
+        isGoingForward = (Random.value <= 0.5f  );
+    }
 
 
     private void Update()
@@ -99,7 +106,7 @@ public class Civilian_Pedestrian : MonoBehaviour
             if (Random.Range(0, 100f) <= TargetWaypoint.BranchChance)
             {
                 destination = TargetWaypoint.Entrypoint.GetPosition();
-                isGoingForward = TargetWaypoint.BranchForward;
+                isGoingForward = (!TargetWaypoint.BranchRandomWay) ? TargetWaypoint.BranchForward : (Random.value < 0.5f);
                 PatrollPath = TargetWaypoint.Branch;
                 TargetWaypoint = TargetWaypoint.Entrypoint;
             }

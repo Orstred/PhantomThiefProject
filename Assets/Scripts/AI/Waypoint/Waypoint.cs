@@ -19,6 +19,8 @@ public class Waypoint : MonoBehaviour
     [Range(0,100)]
     public float BranchChance;
     [ShowIf("isBranching")]
+    public bool BranchRandomWay;
+    [ShowIf("isBranching")]
     public bool BranchForward;
     public bool hasEvent = false;
 
