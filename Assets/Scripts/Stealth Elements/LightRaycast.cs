@@ -17,16 +17,15 @@ public class LightRaycast : MonoBehaviour
     
 
 
-     // Start is called before the first frame update
-     void Start()
+    
+    void Start()
     {
         player = GameManager.instance.playerCharacter;
         playercharacter = GameManager.instance.playerCharacter.GetComponent<PlayerCharacter>();
-       
     }
 
-     // Update is called once per frame
-     void Update()
+    
+    void Update()
     {
         if (!isTrigger)
         {
@@ -96,9 +95,5 @@ public class LightRaycast : MonoBehaviour
         player.GetComponent<PlayerCharacter>().LightSources.Remove(gameObject);
     }
 
-    private void OnDrawGizmos()
-    {
-      //  po = -(Quaternion.Euler(transform.eulerAngles) * Vector3.forward);
-      //  Gizmos.DrawRay(player.position, po * 10000);
-    }
+
 }

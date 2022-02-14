@@ -10,13 +10,15 @@ public class Waypoint : MonoBehaviour
     public Waypoint previousWaypoint;
     public Waypoint nextWaypoint;
 
+
+    #region Branching Options
     public bool isBranching;
     [ShowIf("isBranching")]
     public WaypointManager Branch;
     [ShowIf("isBranching")]
     public Waypoint Entrypoint;
     [ShowIf("isBranching")]
-    [Range(0,100)]
+    [Range(0, 100)]
     public float BranchChance;
     [ShowIf("isBranching")]
     public bool BranchRandomWay;
@@ -31,7 +33,11 @@ public class Waypoint : MonoBehaviour
         DestroyImmediate(Branch.gameObject);
         Branch = null;
         Entrypoint = null;
-    }
+    } 
+    #endregion
+
+
+
 
 
     public void Set(Waypoint prev = null, Waypoint nex = null)
@@ -62,12 +68,6 @@ public class Waypoint : MonoBehaviour
     }
 
 
-
-
-
-
-
-
     public Vector3 GetPosition()
     {
         Vector3 minbound = (transform.position + transform.right * transform.localScale.x);
@@ -83,6 +83,7 @@ public class Waypoint : MonoBehaviour
         transform.localScale = Vector3.zero;
     }
 
+
     private void OnDrawGizmos()
     {
         if (isBranching)
@@ -95,7 +96,7 @@ public class Waypoint : MonoBehaviour
         }
         else
         {
-            Gizmos.DrawSphere(transform.position, .1f);
+            Gizmos.DrawSphere(transform.position, .3f);
         }
 
         

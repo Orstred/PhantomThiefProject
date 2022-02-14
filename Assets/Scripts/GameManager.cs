@@ -34,6 +34,12 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    [HorizontalLine(2, EColor.Gray)]
+    [Header("GAME STATE OPTIONS")]
+    [Scene]
+    public string Victoryscreen;
+    [Scene]
+    public string LooseScreen;
 
 
     [HorizontalLine(2, EColor.Gray)]
@@ -70,7 +76,17 @@ public class GameManager : MonoBehaviour
        _mainspeaker = GetComponent<AudioSource>();
     }
 
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            PlaySFX("Wind");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            PlayOST(1);
+        }
+    }
 
 
 
@@ -103,6 +119,7 @@ public class GameManager : MonoBehaviour
         s.source.volume = s.localVolume * musicVolume;
         s.source.pitch = s.pitch;
         s.source.loop = s.loop;
+        s.source.Play();
     }
 
     public void PlaySFX(int id)
@@ -114,11 +131,17 @@ public class GameManager : MonoBehaviour
         s.source.volume = s.localVolume * musicVolume;
         s.source.pitch = s.pitch;
         s.source.loop = s.loop;
+        s.source.Play();
     }
 
     public void VictoryScreen()
     {
-        SceneManager.LoadScene("MockupVictoryscreen");
+        SceneManager.LoadScene(Victoryscreen);
+    }
+
+    public void LooseMission()
+    {
+        SceneManager.LoadScene(LooseScreen);
     }
 }
 

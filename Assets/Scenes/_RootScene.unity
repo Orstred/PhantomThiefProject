@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17670847, g: 0.22118989, b: 0.30348948, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414736, b: 0.12107852, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -216,8 +216,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 338429924}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.31, y: 2.68, z: 0}
-  m_LocalScale: {x: 0.75392, y: 0.75392, z: 0.75392}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2011907721}
   m_RootOrder: 0
@@ -316,7 +316,7 @@ Transform:
   - {fileID: 1369503202}
   - {fileID: 1664463861}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1369503201
 GameObject:
@@ -581,6 +581,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b759c81a1f68524394ea29431292eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Victoryscreen: MockupVictoryMenu
+  LooseScreen: MockupMainMenu
   currentInteraction: {fileID: 0}
   musicVolume: 0.5
   SFXVolume: 0.5
@@ -599,14 +601,14 @@ MonoBehaviour:
     loop: 0
     Propagation: 1
     source: {fileID: 0}
+  SFX:
   - name: Wind
-    clip: {fileID: 8300000, guid: dd37ca72b5bbe7a41a0173788822d41f, type: 3}
+    clip: {fileID: 8300000, guid: 715771c51322c824dbdc3ae02c0037fc, type: 3}
     localVolume: 1
-    pitch: 1.65
-    loop: 0
-    Propagation: 1
+    pitch: 1
+    loop: 1
+    Propagation: 50.2
     source: {fileID: 0}
-  SFX: []
   playerCharacter: {fileID: 6434043488105702489}
   cameraPivot: {fileID: 1664463861}
   playerGraphic: {fileID: 9171856198058527265}
@@ -624,7 +626,7 @@ Transform:
   - {fileID: 1381279052}
   - {fileID: 148081110}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1453661398
 AudioSource:
@@ -901,8 +903,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011907720}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.69, z: 0}
-  m_LocalScale: {x: 0.18970844, y: 0.1525478, z: 0.1525478}
+  m_LocalPosition: {x: 0, y: 3.22, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 338429925}
   m_Father: {fileID: 6434043488105702489}
@@ -1123,6 +1125,14 @@ PrefabInstance:
       propertyPath: DarkNotfication
       value: 
       objectReference: {fileID: 2011907721}
+    - target: {fileID: 1513613515, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: LightSources.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1513613515, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: LightSources.Array.data[0]
+      value: 
+      objectReference: {fileID: 1453661395}
     - target: {fileID: 1206537473674207859, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
       propertyPath: m_Camera
       value: 
@@ -1177,7 +1187,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3631829532254498335, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3631829532254498335, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1217,6 +1227,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3631829532254498335, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8847000231815261651, guid: 7bfc080299265f94585354f1feb0753b, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
