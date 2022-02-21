@@ -88,10 +88,12 @@ public class LightRaycast : MonoBehaviour
 
     private void OnDisable()
     {
+        if(player != null)
         player.GetComponent<PlayerCharacter>().LightSources.Remove(gameObject); 
     }
     private void OnDestroy()
     {
+        if(player != null)
         player.GetComponent<PlayerCharacter>().LightSources.Remove(gameObject);
     }
 

@@ -28,47 +28,63 @@ public class PlayerMotor : MonoBehaviour
     //Movement Stats
     [HorizontalLine(2f, EColor.Gray)]
     [Header("MOVEMENT")]
+    public float crouchSpeed = 5;
     public float walkSpeed = 10;
     public float runSpeed = 20;
-    public float crouchSpeed = 5;
-    public float turnSpeed = 10;        
+    public float turnSpeed = 10;
+    public float Acceleration = 5;
+
     [HorizontalLine(2f, EColor.Gray)]
     [Header("GRAVITY")]
     public float playerWeight = 50;
     public float jumpHeight = 3;
     public LayerMask groundLayers;
     public float groundDistance = .4f;
-   
 
 
-    
+    [HideInInspector]
+    public float speed;
+    [HideInInspector]
+    public bool isGrounded;
+
     //Local Vars
-    private float currentspeed;
     private bool iscrouching = false;
     private bool isrunning = false;
     private Vector3 gravityvelocity;
- 
+    private float currentspeed;
+   
 
 
 
 
     private void Update()
     {
+        
+        //Accelerates and decelerates the player using lerps
+        if (!(Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0))
+        {
+            
+             speed = Mathf.Lerp(speed, currentspeed, Acceleration * Time.deltaTime);
+
+        }
+        else
+        {
+            
+            speed = Mathf.Lerp(speed, 0, Time.deltaTime * Acceleration);
+        }
+
         #region Gravity and Jumping
-        bool isGrounded = Physics.CheckSphere(transform.position, 0.2f, groundLayers);
+        isGrounded = Physics.CheckSphere(transform.position, 0.2f, groundLayers);
 
         //Calculates gravity when on ground
         if (isGrounded && gravityvelocity.y < 0)
         {
-
             gravityvelocity.y = -15;
 
             if (Input.GetButton("Jump"))
             {
                 Jump(jumpHeight);
             }
-
-
         }
 
 
@@ -81,6 +97,8 @@ public class PlayerMotor : MonoBehaviour
         #endregion
 
         #region Movement Inputs and Run/Crouching Toggles
+
+        
         //Switches between running and walking speeds
         if (Input.GetButtonDown("ToggleRun"))
         {
@@ -90,8 +108,9 @@ public class PlayerMotor : MonoBehaviour
         } 
         else if (Input.GetButtonDown("ToggleCrouch"))
         {
+            if(!iscrouching)
             currentspeed = crouchSpeed;
-            isrunning = false;
+            isrunning = !isrunning;
             iscrouching = !iscrouching;
         }
         //Goes back to walking if no inputs are being received or the player stops walking and is not crouching
@@ -140,7 +159,7 @@ public class PlayerMotor : MonoBehaviour
 
          transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, CameraYRotation + GetKeyboardInputAxisAngle(), 0), Time.deltaTime * turnSpeed); 
 
-        _controller.Move(transform.forward * Time.deltaTime * currentspeed);
+        _controller.Move(transform.forward * Time.deltaTime * speed);
     }
 
     public void Jump(float jumheight = 0.1f)

@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/MockupVictoryMenu.unity
     guid: 28cb1e05f4fda5a429923ec00c3996d9
   - enabled: 1
-    path: Assets/Prefabs/SandBox/SandboxGuilherme/Scenes/MockupLooseScreen.unity
+    path: Assets/Scenes/Menus/MockupLooseScreen.unity
     guid: 9c9786015f8954d4ab73629758406fd7
+  - enabled: 1
+    path: Assets/Prefabs/_SandBox/SandboxGuilherme/MockupCredits/MockupCredits.unity
+    guid: 349481806195bdc46a5a515012061183
   m_configObjects: {}

@@ -36,6 +36,8 @@ public class GrappleShot : MonoBehaviour
     //Grapple instances
     [Foldout("Instances")]
     public RectTransform GrappleCrosshair;
+    [Foldout("Instances")]
+    public Transform GrappleGun;
     private LineRenderer _ropegraphic;
 
 
@@ -182,7 +184,7 @@ public class GrappleShot : MonoBehaviour
     }
     public void OnGrappleStay()
     {
-        _ropegraphic.SetPosition(0, camerapivot.position);
+        _ropegraphic.SetPosition(0, GrappleGun.position);
     
     }
     public void OnGrappleExtit()

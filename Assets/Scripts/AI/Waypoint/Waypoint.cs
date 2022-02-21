@@ -96,7 +96,7 @@ public class Waypoint : MonoBehaviour
         }
         else
         {
-            Gizmos.DrawSphere(transform.position, .3f);
+            Gizmos.DrawSphere(transform.position, .2f);
         }
 
         

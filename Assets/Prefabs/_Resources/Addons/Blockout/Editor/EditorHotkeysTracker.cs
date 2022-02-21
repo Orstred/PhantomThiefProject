@@ -48,7 +48,7 @@ namespace RadicalForge.Blockout
 
             if (!targetEditor)
                 return;
-
+          
 
             if (e != null && e.delta != Vector2.zero && e.type == EventType.ScrollWheel && scrollPicker)
             {
@@ -151,7 +151,7 @@ namespace RadicalForge.Blockout
                     }
                     e.Use();
                 }
-                else if ( e.keyCode == KeyCode.Space && e.type == EventType.KeyDown)
+                else if ( e.keyCode == KeyCode.N && e.type == EventType.KeyDown)
                 {
                     if (!quickPicker && !scrollPicker)
                     {

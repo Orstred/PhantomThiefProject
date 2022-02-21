@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-[System.Serializable]
-public enum PlayerStates {Walking, Crouching, Running, Grappling, Falling}
+
 
 public class PlayerCharacter : MonoBehaviour
 {
     [HorizontalLine(2f, EColor.Gray)]
     [Header("STEALTH")]
-    public PlayerStates State;
 
     public Transform PlayerHeadDetector;
     public Transform PlayerChestDetector;
@@ -18,54 +16,49 @@ public class PlayerCharacter : MonoBehaviour
 
     public bool inShadow;
     public List<GameObject> LightSources;
-        
+
     private float headheight;
 
 
+    [HorizontalLine(2f, EColor.Gray)]
+    [Header("ANIMATION")]
 
+    public bool isIdle;
+    public bool isWalking;
+    public bool isCrouching;
+    public bool isGrappling;
+    public float currentSpeed;
+
+
+
+    //Privates
+    [HideInInspector]
+    public PlayerMotor motor;
 
 
 
     private void Start()
     {
         headheight = PlayerHeadDetector.position.y;
+        motor = GetComponent<PlayerMotor>();
     }
 
     private void Update()
     {
-        #region PlayerStates
         //Switches between states
-        if (Input.GetButtonDown("ToggleRun"))
-        {
-            State = PlayerStates.Running;
-        }
-        else if (Input.GetButtonDown("ToggleCrouch"))
-        {
-            if(State != PlayerStates.Crouching)
-            {
-                State = PlayerStates.Crouching;
-            }
-            else
-            {
-                State = PlayerStates.Walking;
-            }
-        }
-        else if (State != PlayerStates.Running && State != PlayerStates.Crouching || Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            State = PlayerStates.Walking; 
-        }
+        #region PlayerStates
+        ResetStates();
+        currentSpeed = motor.speed;
 
+        if (Input.GetButtonDown("ToggleCrouch")) { isCrouching = !isCrouching; }
 
-        if (State == PlayerStates.Crouching)
-        {
-            PlayerHeadDetector.position = PlayerChestDetector.position;
-            transform.localScale = new Vector3(1f, .3f, 1f);
-        }
-        else if(State != PlayerStates.Crouching)
-        {
-            PlayerHeadDetector.position = new Vector3(transform.position.x, headheight, transform.position.z);
-            transform.localScale = new Vector3(1f, 1f, 1f);
-        }
+        if (Input.GetButtonDown("ToggleRun")) { isCrouching = false; }
+
+        if (Input.GetKey(KeyCode.Mouse1)) { isGrappling = true; }
+
+        if (currentSpeed > .5f && !isGrappling && motor.isGrounded) { isWalking = true; }
+             
+        if (!isWalking && !isGrappling && motor.isGrounded) { isIdle = true; }
         #endregion
         #region Stealth 
         inShadow = (LightSources.Count <= 0);
@@ -73,9 +66,15 @@ public class PlayerCharacter : MonoBehaviour
         #endregion
     }
 
-
-
-
-
-
+    public void ResetStates()
+    {
+        isIdle = false;
+        isWalking = false;
+        isGrappling = false; 
+    }
 }
+
+
+
+
+

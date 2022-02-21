@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   State: 1
   PatrollPath: {fileID: 0}
-  WalkSpeed: 10
+  WalkSpeed: 1
   isGoingForward: 1
   allowBranching: 1
   BackAndForth: 0
@@ -63,15 +63,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab83e7647ed50094ea11aabe2f16e0a2, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab83e7647ed50094ea11aabe2f16e0a2, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab83e7647ed50094ea11aabe2f16e0a2, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab83e7647ed50094ea11aabe2f16e0a2, type: 3}
       propertyPath: m_LocalPosition.x

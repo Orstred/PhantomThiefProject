@@ -23,7 +23,7 @@ public class Civilian_Pedestrian : MonoBehaviour
 
     private void Start()
     {
-        WalkSpeed = Random.Range(3, 7);
+        WalkSpeed = Random.Range(1, 3);
         isGoingForward = (Random.value <= 0.5f  );
     }
 
