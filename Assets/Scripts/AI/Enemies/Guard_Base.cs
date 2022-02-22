@@ -25,7 +25,7 @@ public class Guard_Base : Enemy
     [ShowIf("hasGun")]
     public int RangedDamage;
 
-    private bool foundplayer = false;
+    protected bool foundplayer = false;
     private float atttention;
 
     public override void _Start()

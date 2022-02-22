@@ -44,9 +44,9 @@ public class MenuMockUp : MonoBehaviour
 
 
 
-    public static void NextLevel(int s)
+    public static void NextLevel(SceneGroup s)
     {
-        SceneManager.LoadScene(s);
+        s.Load();
 
     }
     public  void OptionsMenu()
