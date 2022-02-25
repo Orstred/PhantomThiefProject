@@ -27,6 +27,7 @@ public class LightRaycast : MonoBehaviour
     
     void Update()
     {
+
         if (!isTrigger)
         {
             if (isSun)
@@ -60,30 +61,32 @@ public class LightRaycast : MonoBehaviour
             }
         }
 
+        
+
      }
 
 
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
-        if (isTrigger)
-        {
-            if (other.tag == "Player")
+             
+            if (other.tag == "Player" && player == null)
             {
                 player = other.transform;
+            if (!other.GetComponent<PlayerCharacter>().LightSources.Contains(gameObject))
                 other.GetComponent<PlayerCharacter>().LightSources.Add(gameObject);
             }
-        }
+        
     }
-    private void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)
     {
-        if (isTrigger)
-        {
+            if(player == null)
             player = GameManager.instance.playerCharacter;
-            if (other.tag == "Player")
+            if (other.tag == "Player" && player != null)
             {
-                other.GetComponent<PlayerCharacter>().LightSources.Remove(gameObject);
+            other.GetComponent<PlayerCharacter>().RemoveLight(gameObject);
+                player = null;
             }
-        }
+        
     }
 
     private void OnDisable()

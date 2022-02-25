@@ -6,12 +6,12 @@ public class Anim_Guard : MonoBehaviour
 {
 
     Animator anim;
-    RangedGuard en;
+    Enemy en;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
-        en = GetComponentInParent<RangedGuard>();
+        en = GetComponentInParent<Enemy>();
     }
 
     private void Update()

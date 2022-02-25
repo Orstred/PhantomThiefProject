@@ -17,7 +17,7 @@ public class PlayerCharacter : MonoBehaviour
     public bool inShadow;
     public List<GameObject> LightSources;
 
-    private float headheight;
+    private Vector3 headheight;
 
 
     [HorizontalLine(2f, EColor.Gray)]
@@ -39,7 +39,7 @@ public class PlayerCharacter : MonoBehaviour
 
     private void Start()
     {
-        headheight = PlayerHeadDetector.position.y;
+        headheight = new Vector3(0,PlayerHeadDetector.position.y,0);
         motor = GetComponent<PlayerMotor>();
     }
 
@@ -50,7 +50,7 @@ public class PlayerCharacter : MonoBehaviour
         ResetStates();
         currentSpeed = motor.speed;
 
-        if (Input.GetButtonDown("ToggleCrouch")) { isCrouching = !isCrouching; }
+        if (Input.GetButtonDown("ToggleCrouch")) { isCrouching = !isCrouching; PlayerHeadDetector.position = (PlayerHeadDetector.position == PlayerChestDetector.position) ? headheight : PlayerChestDetector.position; }
 
         if (Input.GetButtonDown("ToggleRun")) { isCrouching = false; }
 
@@ -71,6 +71,11 @@ public class PlayerCharacter : MonoBehaviour
         isIdle = false;
         isWalking = false;
         isGrappling = false; 
+    }
+
+    public void RemoveLight(GameObject g)
+    {
+        LightSources.Remove(g);
     }
 }
 
