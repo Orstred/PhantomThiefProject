@@ -7,12 +7,12 @@ public class PeripheralVisionCone : MonoBehaviour
 
 
 
-    Enemy en;
+    IEnemy en;
 
 
     private void Start()
     {
-        en = GetComponentInParent<Enemy>();
+        en = GetComponentInParent<IEnemy>();
     }
 
 

@@ -71,6 +71,7 @@ public class Civilian_Pedestrian : MonoBehaviour
     }
 
 
+
     public virtual void FollowPath()
     {
         //If the agent has no destination go to the closest point

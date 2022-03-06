@@ -6,36 +6,59 @@ public class VisionCone : MonoBehaviour
 {
 
 
-    Enemy en;
-
+    Guard_Base parentAI;
+    LayerMask IgnoreLayers;
 
     private void Start()
     {
-        en = GetComponentInParent<Enemy>();
+        parentAI = GetComponentInParent<Guard_Base>();
+        IgnoreLayers = parentAI.RaycastIgnore;
     }
-
 
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        ReliableOnTriggerExit.NotifyTriggerEnter(other, gameObject, OnTriggerExit);
+        if (other.tag == "Player")
         {
-            en.OnPlayerEnterVision(other.gameObject);
+            if(IsPlayerVisible(other.GetComponent<PlayerCharacter>()))
+            parentAI.OnPlayerEnterVision(other.gameObject);
         }
     }
     private void OnTriggerStay(Collider other)
-    {
-        if(other.tag == "Player")
+    { 
+        if (other.tag == "Player")
         {
-            en.OnPlayerStayInVision(other.gameObject);
+            if (IsPlayerVisible(other.GetComponent<PlayerCharacter>()))
+            {
+                parentAI.OnPlayerStayInVision(other.gameObject);
+            }
+            else
+            {
+                parentAI.OnPlayerExitVision(other.gameObject);
+            }      
         }
     }
     private void OnTriggerExit(Collider other)
     {
+        ReliableOnTriggerExit.NotifyTriggerExit(other, gameObject);
         if (other.tag == "Player")
         {
-            en.OnPlayerExitVision(other.gameObject);
+            parentAI.OnPlayerExitVision(other.gameObject);
         }
     }
 
+
+    public bool IsPlayerVisible(PlayerCharacter p)
+    {
+        if (!p.inShadow && !(Physics.Linecast(transform.position, p.PlayerHeadDetector.position, ~IgnoreLayers) && Physics.Linecast(transform.position, p.PlayerChestDetector.position, ~IgnoreLayers)))
+        { 
+        return true;   
+        }
+        else
+        {
+        return false;
+        }
+        
+    }
 }

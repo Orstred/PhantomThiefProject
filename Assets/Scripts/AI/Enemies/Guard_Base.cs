@@ -2,10 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.AI;
 
-
-public class Guard_Base : Enemy
+[RequireComponent(typeof(NavMeshAgent))]
+public class Guard_Base : MonoBehaviour, IEnemy, IDamage
 {
+
+
+
+
+    [HorizontalLine(2f, EColor.Gray)]
+    [Header("AI OPTIONS")]
+    public EnemyState State;
+    public WaypointManager PatrollPath;
+    public float WalkSpeed = 5, RunSpeed = 15;
+    public bool BackAndForth;
+    public bool isGoingForward;
+    public bool allowBranching;
+
+
 
     [HorizontalLine(2f, EColor.Gray)]
     [Header("ENEMY OPTIONS")]
@@ -13,154 +28,256 @@ public class Guard_Base : Enemy
     public GameObject PeripheralVisionCone;
     public float AttentionSpan;
     public Vector3 GuardPosition;
-    public LayerMask Detect;
+    public LayerMask RaycastIgnore;
+    public int Health = 1;
 
-    [HorizontalLine(2f, EColor.Gray)]
-    [Header("GUARD OPTIONS")]
-    public float MeleeDistance;
-    public int MeleeDamage;
-    public bool hasGun;
-    [ShowIf("hasGun")]
-    public float RangedDistance;
-    [ShowIf("hasGun")]
-    public int RangedDamage;
 
-    protected bool foundplayer = false;
-    private float atttention;
+    
+    protected EnemyState startingstate;
+    protected bool foundplayercharacter = false;
+    protected float AtttentionSpan_counter;
+    [HideInInspector] public NavMeshAgent agent;
+    protected bool isfollowingpath;
+    protected Waypoint targetwaypoint;
+    protected bool hasreacheddestination;
+    protected GameObject playercharacter;
 
-    public override void _Start()
+
+
+
+
+
+    public void Start()
     {
-        base._Start();
+        agent = GetComponent<NavMeshAgent>();
+        startingstate = State;
         VisionCone.AddComponent<VisionCone>();
         PeripheralVisionCone.AddComponent<PeripheralVisionCone>();
+        playercharacter = GameManager.instance.playerCharacter.gameObject;
     }
 
-    public override void _Update()
+    public void Update()
     {
-        base._Update();
-    }
-
-
-
-    public override void Idle()
-    {
-        base.Idle();
-    }
-    public override void Guard()
-    {
-        base.Guard();
-    }
-    public override void Patroll()
-    {
-        base.Patroll();
-    }
-
-
-    public override void Suspicious()
-    {
-        base.Suspicious();
-    }
-    public override void Alert()
-    {
-        base.Alert();
-    }
-    public override void Chasing()
-    {
-        base.Chasing();
-        agent.SetDestination(player.transform.position);
-
-        if (foundplayer)
+        #region StateBehaviours
+        if (State == EnemyState.Idle)
         {
-            atttention = AttentionSpan;
+            Idle();
         }
-        else
+        else if (State == EnemyState.Guard)
         {
-            atttention -= Time.deltaTime;
-            if(atttention <= 0)
-            {
-                State = EnemyState.Patroll;
-            }
+            Guard();
         }
-    }
-
-
-    public override void NPC_Event()
-    {
-        base.NPC_Event();
-    }
-
-
-
-    public override void OnPlayerEnterVision(GameObject g)
-    {
-        PlayerCharacter p = g.GetComponent<PlayerCharacter>();
-
-        //Casts 2 rays to checks if players head and chest is in view
-        if (!(Physics.Linecast(VisionCone.transform.position, p.PlayerHeadDetector.position, ~Detect) && Physics.Linecast(VisionCone.transform.position, p.PlayerChestDetector.position, ~Detect)))
+        else if (State == EnemyState.Patroll)
         {
-            if (!p.inShadow)
-            {
-                base.OnPlayerEnterVision(g);
-                player = g;
-                GetComponent<AudioSource>().Play();
-                State = EnemyState.Chasing;
-                Debug.Log("Player " + g.name + " in sight");
-                foundplayer = true;
-                State = EnemyState.Chasing;
-            }
+            Patroll();
         }
-    }
-    public override void OnPlayerStayInVision(GameObject g)
-    {
-        base.OnPlayerStayInVision(g);
-        PlayerCharacter p = g.GetComponent<PlayerCharacter>();
-
-        //Casts 2 rays to checks if players head and chest is in view
-        if (!foundplayer)
+        else if (State == EnemyState.NPC_EVENT)
         {
-            if (!(Physics.Linecast(VisionCone.transform.position, p.PlayerHeadDetector.position, ~Detect) && Physics.Linecast(VisionCone.transform.position, p.PlayerChestDetector.position, ~Detect)))
+            NPC_Event();
+        }
+        else if (State == EnemyState.Suspicious)
+        {
+            Suspicious();
+        }
+        else if (State == EnemyState.Alert)
+        {
+            Alert();
+        }
+        else if (State == EnemyState.Chasing)
+        {
+            Chasing();
+        }
+        #endregion
+    }
+
+
+
+
+
+    #region IEnemy
+    public virtual void Idle()
+    {
+        agent.speed = 0;
+    }
+
+    public virtual void Guard()
+    {
+        
+    }
+
+    public virtual void Patroll()
+    {
+        agent.speed = WalkSpeed;
+        hasreacheddestination = (transform.position - agent.destination).magnitude < 0.2f;
+
+        //Checks for branching paths and Events on the current waypoint
+        if (hasreacheddestination && targetwaypoint != null)
+        {
+            if (targetwaypoint.hasEvent) { State = EnemyState.NPC_EVENT; }
+            else if (allowBranching && targetwaypoint.isBranching) { BranchOf(); }
+            if (!BackAndForth && !PatrollPath.Loop)
             {
-                if (!p.inShadow)
+                if (targetwaypoint == PatrollPath.Pathway[0] || targetwaypoint == PatrollPath.LastWayPoint())
                 {
-                    base.OnPlayerEnterVision(g);
-                    player = g;
-                    GetComponent<AudioSource>().Play();
-                    State = EnemyState.Chasing;
-                    Debug.Log("Player " + g.name + " in sight");
-                    foundplayer = true;
-                    State = EnemyState.Chasing;
+                    agent.stoppingDistance = .4f;
+                    State = EnemyState.Idle;
+                    agent.SetDestination(transform.position);
+                    agent.stoppingDistance = 0.1f;
                 }
             }
         }
+
+        //Moves Entity along a waypoint manager
+        FollowPath();
+    }
+
+
+    public virtual void Suspicious()
+    {
+       
+    }
+
+    public virtual void Alert()
+    {
       
     }
-    public override void OnPlayerExitVision(GameObject g)
+
+    public virtual void Chasing()
     {
-        base.OnPlayerExitVision(g);
-        foundplayer = false;
+        agent.speed = RunSpeed;
+        agent.SetDestination(playercharacter.transform.position);
+        if (foundplayercharacter)
+        {
+            AtttentionSpan_counter = AttentionSpan;
+        }
+        else
+        {
+            AtttentionSpan_counter -= Time.deltaTime;
+            if(AtttentionSpan_counter <= 0)
+            {
+                State = startingstate;
+            }
+        }
     }
 
-    public override void OnPlayerEnterPeripheralVision(Vector3 suspos)
+    public virtual void NPC_Event()
     {
-        base.OnPlayerEnterPeripheralVision(suspos);
-    }
-    public override void OnPlayerStayInPeripheralVision(Vector3 suspos)
-    {
-        base.OnPlayerStayInPeripheralVision(suspos);
-    }
-    public override void OnPlayerExitPeripheralVision(Vector3 suspos)
-    {
-        base.OnPlayerExitPeripheralVision(suspos);
+       
     }
 
 
-    public void SuspiciousPoint(Vector3 SusPoint)
+
+    public void OnPlayerEnterVision(GameObject g)
     {
-
+        playercharacter = g;
+        GetComponent<AudioSource>().volume = GameManager.instance.musicVolume;
+        GetComponent<AudioSource>().Play();
+        State = EnemyState.Chasing;
+        Debug.Log("Player " + g.name + " in sight");
+        foundplayercharacter = true;
     }
-    public void AlertPoint(Vector3 AlerPoint)
+    public void OnPlayerStayInVision(GameObject g) 
     {
-
+        if (!foundplayercharacter)
+        { 
+         playercharacter = g;
+         if (!GetComponent<AudioSource>().isPlaying)
+         GetComponent<AudioSource>().Play();
+         State = EnemyState.Chasing;
+         Debug.Log("Player " + g.name + " in sight");
+         foundplayercharacter = true;
+         State = EnemyState.Chasing;
+        } 
+    }
+    public void OnPlayerExitVision(GameObject g)
+    {
+        foundplayercharacter = false;
     }
 
+    public void OnPlayerEnterPeripheralVision(Vector3 suspos)
+    {
+        
+    }
+    public void OnPlayerStayInPeripheralVision(Vector3 suspos)
+    {
+        
+    }
+    public void OnPlayerExitPeripheralVision(Vector3 suspos)
+    {
+        
+    }
+
+    public void SuspiciousPoint(Vector3 point) { }
+    public void AlertPoint(Vector3 AlerPoint) { }
+    #endregion
+   
+    #region Idamage
+    public void TakeDamage(int Damage)
+    {
+        Health -= Damage;
+    }
+    public void DealDamage(GameObject Character, int Damage)
+    {
+        Character.GetComponent<IDamage>().TakeDamage(Damage);
+    }
+    #endregion
+
+
+
+    //Waypoint manager following logic
+    protected Waypoint GetClosestPointInCurrentPath()
+    {
+        Waypoint p = null;
+        foreach (Waypoint g in PatrollPath.Pathway)
+        {
+            if (p == null)
+            {
+                p = g;
+            }
+            else if (Vector3.Distance(g.transform.position, transform.position) < Vector3.Distance(transform.position, p.transform.position))
+            {
+                p = g;
+            }
+        }
+        return p;
+    }
+    public void FollowPath()
+    {
+        //If the agent has no destination go to the closest point
+        if (targetwaypoint == null)
+        {
+            targetwaypoint = GetClosestPointInCurrentPath();
+            agent.SetDestination(targetwaypoint.GetPosition());
+        }
+
+        //If the agent has reached the way point
+        else if (hasreacheddestination)
+        {
+
+            //Changes target direction if is back and forward and not loop else it stops the agent
+            if (BackAndForth && !PatrollPath.Loop)
+            {
+                if (targetwaypoint == PatrollPath.Pathway[0] || targetwaypoint == PatrollPath.LastWayPoint())
+                {
+                    isGoingForward = !isGoingForward;
+                }
+            }
+
+            //Changes the target waypoint to be the next waypoint based on wether it's going forward or back on the path
+            targetwaypoint = (isGoingForward) ? targetwaypoint.nextWaypoint : targetwaypoint.previousWaypoint;
+            if (targetwaypoint != null)
+                agent.SetDestination(targetwaypoint.GetPosition());
+        }
+    }
+    public void BranchOf()
+    {
+        //Calculates the chance of branching
+        if (Random.Range(0, 100f) <= targetwaypoint.BranchChance)
+        {
+            agent.SetDestination(targetwaypoint.Entrypoint.GetPosition());
+            isGoingForward = targetwaypoint.BranchForward;
+            PatrollPath = targetwaypoint.Branch;
+            targetwaypoint = targetwaypoint.Entrypoint;
+        }
+    }
 }
