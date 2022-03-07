@@ -11,7 +11,7 @@ public class SceneGroup : ScriptableObject
     [Scene]
     public string[] scenes;
 
-
+    
     public void Load()
     {
         SceneManager.LoadScene(scenes[0],LoadSceneMode.Single);

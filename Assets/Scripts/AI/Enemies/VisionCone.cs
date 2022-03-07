@@ -48,7 +48,7 @@ public class VisionCone : MonoBehaviour
         }
     }
 
-
+    
     public bool IsPlayerVisible(PlayerCharacter p)
     {
         if (!p.inShadow && !(Physics.Linecast(transform.position, p.PlayerHeadDetector.position, ~IgnoreLayers) && Physics.Linecast(transform.position, p.PlayerChestDetector.position, ~IgnoreLayers)))

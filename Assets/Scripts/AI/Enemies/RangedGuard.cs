@@ -11,29 +11,28 @@ public class RangedGuard : Guard_Base
     public float RangeDistance;
     public int RangedDamage;
     public float AttackRate;
-
+    public GameObject Bullet;
+    public Transform Shooter;
     
 
     public override void Chasing()
     {
         if(Vector3.Distance(playercharacter.transform.position,transform.position) < RangeDistance - 1f)
         {
+            Shooter.LookAt(playercharacter.transform.position + Vector3.up);
             Attack();
         }
         else
-        base.Chasing();
+        base.Chasing();     
     }
 
     
     public void Attack()
-    {
-        if (!Physics.Linecast(transform.position, playercharacter.transform.position, LayerMask.GetMask("Player")))
-        {
+    { 
             AtttentionSpan_counter = 1;
             agent.SetDestination(transform.position);
             agent.speed = 0;
-            Shoot();
-        }
+            Shoot();    
     }
 
     float Rate;
@@ -45,7 +44,7 @@ public class RangedGuard : Guard_Base
             Debug.Log("Shot at player");
             Rate = AttackRate;
             GameManager.instance.PlaySFX(1);
-            DealDamage(playercharacter, RangedDamage);
+            Instantiate(Bullet, Shooter.position, Shooter.rotation);
         }
 
     }

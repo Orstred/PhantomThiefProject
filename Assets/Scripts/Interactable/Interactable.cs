@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Interactable : MonoBehaviour
+public abstract class Interactable : MonoBehaviour
 {
 
     public float interactionRange;
@@ -23,7 +23,7 @@ public class Interactable : MonoBehaviour
     {
         if(manager.currentInteraction == null || manager.currentInteraction == gameObject)
         {
-            if (Vector3.Distance(interactionRoot.transform.position, playercharacter.position) <= interactionRange)
+            if (Vector3.Distance(interactionRoot.position, playercharacter.position) <= interactionRange)
             {
                 if (!interactabledistance)
                 {

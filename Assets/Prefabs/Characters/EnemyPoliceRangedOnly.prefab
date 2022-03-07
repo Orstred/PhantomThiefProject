@@ -3157,6 +3157,8 @@ MonoBehaviour:
   RangeDistance: 0
   RangedDamage: 1
   AttackRate: 2
+  Bullet: {fileID: 3784807154462172537, guid: 3ebe30ef610c36a4189a66c586cffa52, type: 3}
+  Shooter: {fileID: 2340484144893995621}
 --- !u!1 &8378856212593159001
 GameObject:
   m_ObjectHideFlags: 0

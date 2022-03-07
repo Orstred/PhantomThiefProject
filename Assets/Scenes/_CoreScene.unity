@@ -476,7 +476,7 @@ MonoBehaviour:
   CameraDistance: 3
   CameraCollisionFilter:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 59
   IgnoreTag: Player
   CameraRadius: 0.2
 --- !u!114 &1372851805
@@ -623,6 +623,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Victoryscreen: MockupVictoryMenu
   LooseScreen: MockupMainMenu
+  Cash: 0
   currentInteraction: {fileID: 0}
   musicVolume: 0.27
   SFXVolume: 0.5
@@ -651,6 +652,13 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Shot
     clip: {fileID: 8300000, guid: fdf30962f19dce844a783ef74bb9683a, type: 3}
+    localVolume: 1
+    pitch: 1
+    loop: 0
+    Propagation: 50.2
+    source: {fileID: 0}
+  - name: Caching
+    clip: {fileID: 8300000, guid: 6a2ae8bdf7367eb4c94fa99660fee3a8, type: 3}
     localVolume: 1
     pitch: 1
     loop: 0

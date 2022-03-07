@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     public string Victoryscreen;
     [Scene]
     public string LooseScreen;
-
+    public int Cash;
 
     [HorizontalLine(2, EColor.Gray)]
     [Header("INTERACTION MANAGER OPTIONS")]
