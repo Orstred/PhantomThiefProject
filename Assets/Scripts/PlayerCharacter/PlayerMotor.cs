@@ -58,21 +58,8 @@ public class PlayerMotor : MonoBehaviour
 
 
     private void Update()
-    {
-        
-
-        //Accelerates and decelerates the player using lerps
-        if (!(Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0))
-        {
-            
-             speed = Mathf.Lerp(speed, currentspeed, Acceleration * Time.deltaTime);
-
-        }
-        else
-        {
-            
-            speed = Mathf.Lerp(speed, 0, Time.deltaTime * Acceleration);
-        }
+    { 
+        speed = (!(Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)) ? Mathf.Lerp(speed, currentspeed, Acceleration * Time.deltaTime) : Mathf.Lerp(speed, 0, Time.deltaTime * Acceleration); 
 
         #region Gravity and Jumping
         isGrounded = Physics.CheckSphere(transform.position, 0.2f, groundLayers);

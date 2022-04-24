@@ -94,10 +94,10 @@ public class WaypointManager : MonoBehaviour
     [Button]
     public void AddWaypointBefore()
     {
-        //if there is nothing after current waypoint
+        //if there is nothing before current waypoint
         if (Selection.activeGameObject.GetComponent<Waypoint>() == Pathway[0])
         {
-        
+
 
         }
         else
@@ -147,11 +147,24 @@ public class WaypointManager : MonoBehaviour
         }
     }
     [Button]
-    public void RemoveBranchFromPoint()
+    public void RemoveBranchFromPoint() 
     {
         if (Selection.activeGameObject.GetComponent<Waypoint>())
         {
-            Selection.activeGameObject.GetComponent<Waypoint>().RemoveBranch();
+            Selection.activeGameObject.GetComponent<Waypoint>().isBranching = false;
+            DestroyImmediate(Selection.activeGameObject.GetComponent<Waypoint>().Branch.gameObject);
+            Selection.activeGameObject.GetComponent<Waypoint>().Branch = null;
+            Selection.activeGameObject.GetComponent<Waypoint>().Entrypoint = null;
+        }
+    }
+    [Button]
+    public void AllPointsToGround()
+    {
+        foreach(Waypoint w in Pathway)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(w.transform.position, -w.transform.up * 10, out hit))
+                w.transform.position = hit.point;
         }
     }
 #endif

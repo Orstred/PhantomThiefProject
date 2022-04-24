@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17670847, g: 0.22118989, b: 0.30348948, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 37fdd4468a7e9084499206f4411956d2, type: 2}
 --- !u!1 &163912398
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,14 +150,14 @@ RectTransform:
   m_GameObject: {fileID: 163912398}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.46716, y: 0.46716, z: 0.46716}
+  m_LocalScale: {x: 0.36378217, y: 0.36378217, z: 0.36378217}
   m_Children: []
   m_Father: {fileID: 1363615814}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -751.0212, y: 435}
+  m_AnchoredPosition: {x: 444, y: 473}
   m_SizeDelta: {x: 908.4407, y: 437.04}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &163912400
@@ -271,14 +271,14 @@ RectTransform:
   m_GameObject: {fileID: 1321100459}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.46716, y: 0.46716, z: 0.46716}
+  m_LocalScale: {x: 0.36378217, y: 0.36378217, z: 0.36378217}
   m_Children: []
   m_Father: {fileID: 1363615814}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -328.02173, y: 435}
+  m_AnchoredPosition: {x: 777.99945, y: 473}
   m_SizeDelta: {x: 891.3135, y: 437.04}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1363615810

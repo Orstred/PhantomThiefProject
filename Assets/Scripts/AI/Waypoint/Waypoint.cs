@@ -26,38 +26,62 @@ public class Waypoint : MonoBehaviour
     public bool BranchForward;
     public bool hasEvent = false;
 
+    #endregion
+
+#if UNITY_EDITOR
+    [Button]
+    public void NewWaypoint()
+    {
+        GetComponentInParent<WaypointManager>().NewWaypoint();
+    }
+    [Button]
+    public void RemoveWaypoint()
+    {
+        GetComponentInParent<WaypointManager>().RemoveWaypoint();
+    }
+    [Button]
+    public void AddWayPointAfter()
+    {
+        GetComponentInParent<WaypointManager>().AddWaypointAfter();
+    }
+    [Button]
+    public void AddWaypointBefore()
+    {
+        GetComponentInParent<WaypointManager>().AddWaypointBefore();
+    }
+    [Button]
+    public void AddBranch()
+    {
+        GetComponentInParent<WaypointManager>().AddBranchingPath();
+    }
     [Button]
     public void RemoveBranch()
     {
-        isBranching = false;
-        DestroyImmediate(Branch.gameObject);
-        Branch = null;
-        Entrypoint = null;
-    } 
-    #endregion
+        GetComponentInParent<WaypointManager>().RemoveBranchFromPoint();
+    }
+#endif
 
 
 
 
-
-    public void Set(Waypoint prev = null, Waypoint nex = null)
+    public void Set(Waypoint previous = null, Waypoint next = null)
     {
-        previousWaypoint = prev;
-        nextWaypoint = nex;
+        previousWaypoint = previous;
+        nextWaypoint = next;
 
-        if(nex != null && prev != null)
+        if(next != null && previous != null)
         {
-            transform.position = Vector3.Lerp(prev.transform.position, nex.transform.position, .5f);
-            transform.localScale = Vector3.Lerp(prev.transform.localScale, nex.transform.localScale, .5f);
-            transform.rotation = Quaternion.Euler(Vector3.Lerp(prev.transform.eulerAngles, nex.transform.eulerAngles, .5f));
+            transform.position = Vector3.Lerp(previous.transform.position, next.transform.position, .5f);
+            transform.localScale = Vector3.Lerp(previous.transform.localScale, next.transform.localScale, .5f);
+            transform.rotation = Quaternion.Euler(Vector3.Lerp(previous.transform.eulerAngles, next.transform.eulerAngles, .5f));
         }
-        else if(prev != null)
+        else if(previous != null)
         {
-            transform.position =prev.transform.position + prev.transform.forward;
-            transform.rotation = prev.transform.rotation;
-            transform.localScale = prev.transform.localScale;
+            transform.position =previous.transform.position + previous.transform.forward;
+            transform.rotation = previous.transform.rotation;
+            transform.localScale = previous.transform.localScale;
         }
-        else if(prev == null && nex == null)
+        else if(previous == null && next == null)
         {
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
@@ -85,7 +109,7 @@ public class Waypoint : MonoBehaviour
 
 
     private void OnDrawGizmos()
-    {
+    { 
         if (isBranching)
         {
             Gizmos.color = Color.red;
@@ -97,9 +121,7 @@ public class Waypoint : MonoBehaviour
         else
         {
             Gizmos.DrawSphere(transform.position, .2f);
-        }
-
-        
+        }  
     }
 
 }
